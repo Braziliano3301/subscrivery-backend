@@ -107,23 +107,62 @@ Subscrivery/
 
 ## ✅ O Que Já Está Implementado
 
-### Backend ✅ TESTADO E FUNCIONANDO
-1. ✅ **Servidor Express** configurado e rodando (porta 3000)
-2. ✅ **Conexão com PostgreSQL** (Neon Cloud - Produção)
-3. ✅ **Autenticação JWT** completa e testada:
+### ✅ Backend (50% completo)
+   ✅ Autenticação JWT (register, login, profile)  
+   ✅ User Model com bcrypt  
+   ✅ CRUD Fornecedores (completo - 6 endpoints)  
+   ⏳ CRUD Assinaturas (próximo)  
+   ⏳ CRUD Pedidos  
+   ⏳ Listagem de Planos (GET /api/plans)
+
+### ⏳ Frontend (10% completo)
+   ✅ Estrutura criada (React + Vite + Tailwind)  
+   ⏳ AuthContext e integração API  
+   ⏳ Página Login/Register  
+   ⏳ Dashboard Cliente  
+   ⏳ Dashboard Fornecedor  
+   ⏳ Marketplace (listar fornecedores)  
+   ⏳ Página Assinatura  
+   ⏳ Página Pedidos
+
+### ⏳ Design (0% completo)
+   ⏳ Definir paleta de cores  
+   ⏳ Criar logo (Figma/Canva)  
+   ⏳ Protótipo Figma (telas principais)  
+   ⏳ Design system (componentes)
+
+### ⏳ Deploy (0% completo)
+   ⏳ Backend → Railway/Heroku  
+   ⏳ Frontend → Vercel  
+   ⏳ Testes em produção
+
+---
+
+## 📊 Progresso Detalhado
+
+### Backend ✅✅✅⚪⚪⚪ (50%)
+1. ✅ **Autenticação JWT** completa e testada:
    - `POST /api/auth/register` - Cadastro de usuário ✅ TESTADO
    - `POST /api/auth/login` - Login ✅ TESTADO
    - `GET /api/auth/profile` - Perfil do usuário (protegido) ✅ TESTADO
    - `PUT /api/auth/profile` - Atualizar perfil (protegido) ✅ IMPLEMENTADO
-4. ✅ **Middlewares**:
+2. ✅ **CRUD Fornecedores** completo e testado:
+   - `POST /api/suppliers` - Criar perfil ✅ TESTADO
+   - `GET /api/suppliers` - Listar com filtros ✅ TESTADO
+   - `GET /api/suppliers/:id` - Detalhes ✅ IMPLEMENTADO
+   - `GET /api/suppliers/me/profile` - Meu perfil ✅ TESTADO
+   - `PUT /api/suppliers/:id` - Atualizar ✅ IMPLEMENTADO
+   - `DELETE /api/suppliers/:id` - Deletar ✅ IMPLEMENTADO
+3. ✅ **Middlewares**:
    - Autenticação JWT ✅
    - Validação de dados ✅
    - Verificação de permissões (cliente/fornecedor) ✅
    - CORS configurado ✅
-5. ✅ **Models**: UserModel com CRUD completo
-6. ✅ **Database Schema**: 7 tabelas criadas no banco
-7. ✅ **Página de Testes** (test-api.html) - Interface visual para testar API
-8. ✅ **Primeiro usuário criado** no banco de dados (cliente@test.com)
+4. ✅ **Models**: UserModel + SupplierModel com CRUD completo
+5. ✅ **Database Schema**: 7 tabelas criadas no banco
+6. ✅ **Página de Testes** (test-api.html) - Interface visual para testar API
+7. ✅ **Usuários criados**: cliente@test.com + fornecedor@test.com
+8. ✅ **Git**: Commit realizado (3be4475)
 
 ### Banco de Dados (Tabelas Criadas)
 - ✅ `users` - Usuários (clientes + fornecedores)
@@ -331,12 +370,18 @@ POST http://localhost:3000/api/auth/login
 
 1. **Banco de Dados:** Já está em produção (Neon), não precisa instalar PostgreSQL local
 2. **Dependências:** Todas instaladas, basta rodar `npm install` em cada pasta
-3. **Git:** Recomendado criar branches por feature (GitFlow)
-4. **Commits:** Usar mensagens descritivas (ex: `feat: adiciona login de usuário`)
-5. **Code Review:** Todo PR deve ser revisado antes de merge
+3. **Porta do Servidor:** Backend roda na porta **3000** (não 5000)
+4. **CORS:** Configurado para aceitar todas origens em desenvolvimento (`origin: '*'`)
+5. **Testes:** Use `backend/test-api.html` para testar visualmente os endpoints
+6. **Git:** Recomendado criar branches por feature (GitFlow)
+7. **Commits:** Usar mensagens descritivas (ex: `feat: adiciona login de usuário`)
+8. **Code Review:** Todo PR deve ser revisado antes de merge
+9. **Primeiro Usuário:** Já existe um usuário de teste (cliente@test.com / senha123)
 
 ---
 
-**Última Atualização:** 12/12/2025 às 19h  
-**Responsável pelo Setup:** [Seu Nome]  
-**Status Geral:** ✅ Backend funcionando | ⏳ Frontend estruturado | 📋 Docs completas
+**Última Atualização:** 13/12/2025 às 23h15  
+**Responsável pelo Setup:** Equipe Subscrivery  
+**Status Geral:** ✅ Backend 50% (Auth + Fornecedores) | ⏳ Frontend 10% | ⏳ Design 0%  
+**Próximo:** CRUD Assinaturas + GET /api/plans  
+**Deadline:** 26/12/2025 (13 dias restantes)
