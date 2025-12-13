@@ -7,6 +7,7 @@ import authRoutes from './routes/auth.routes.js';
 import supplierRoutes from './routes/supplier.routes.js';
 import planRoutes from './routes/plan.routes.js';
 import subscriptionRoutes from './routes/subscription.routes.js';
+import orderRoutes from './routes/order.routes.js';
 
 // Carregar variáveis de ambiente
 dotenv.config();
@@ -53,6 +54,9 @@ app.use('/api/plans', planRoutes);
 
 // Rotas de assinaturas
 app.use('/api/subscriptions', subscriptionRoutes);
+
+// Rotas de pedidos
+app.use('/api/orders', orderRoutes);
 
 // Tratamento de erro 404
 app.use((req, res) => {

@@ -100,7 +100,8 @@ const options = {
       { name: 'Autenticação', description: 'Endpoints de registro, login e perfil de usuários' },
       { name: 'Fornecedores', description: 'CRUD de fornecedores (supermercados, farmácias, petshops)' },
       { name: 'Planos', description: 'Listagem de planos de assinatura disponíveis' },
-      { name: 'Assinaturas', description: 'Gerenciamento de assinaturas de clientes' }
+      { name: 'Assinaturas', description: 'Gerenciamento de assinaturas de clientes' },
+      { name: 'Pedidos', description: 'Criação e gerenciamento de pedidos de clientes e fornecedores' }
     ]
   },
   apis: ['./src/routes/*.js'] // Caminho para os arquivos de rotas

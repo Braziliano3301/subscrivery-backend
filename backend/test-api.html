@@ -196,6 +196,34 @@
             <button onclick="testResumeSubscription()">Reativar</button>
             <div id="resume-subscription-result"></div>
         </div>
+
+        <!-- Teste 15: Criar Pedido -->
+        <div class="test-section">
+            <h2>1️⃣5️⃣ Criar Pedido (Requer Login Cliente + Assinatura Ativa)</h2>
+            <button onclick="testCreateOrder()">Criar Pedido</button>
+            <div id="create-order-result"></div>
+        </div>
+
+        <!-- Teste 16: Meus Pedidos -->
+        <div class="test-section">
+            <h2>1️⃣6️⃣ Meus Pedidos (Requer Login Cliente)</h2>
+            <button onclick="testMyOrders()">Listar Meus Pedidos</button>
+            <div id="my-orders-result"></div>
+        </div>
+
+        <!-- Teste 17: Pedidos do Fornecedor -->
+        <div class="test-section">
+            <h2>1️⃣7️⃣ Pedidos do Fornecedor (Requer Login Fornecedor)</h2>
+            <button onclick="testSupplierOrders()">Ver Pedidos Recebidos</button>
+            <div id="supplier-orders-result"></div>
+        </div>
+
+        <!-- Teste 18: Atualizar Status do Pedido -->
+        <div class="test-section">
+            <h2>1️⃣8️⃣ Atualizar Status do Pedido (Requer Login Fornecedor)</h2>
+            <button onclick="testUpdateOrderStatus()">Confirmar Pedido</button>
+            <div id="update-order-result"></div>
+        </div>
     </div>
 
     <script>
@@ -204,6 +232,7 @@
         let supplierId = null;
         let subscriptionId = null;
         let selectedPlanId = null;
+        let orderId = null;
 
         async function testHealth() {
             const resultDiv = document.getElementById('health-result');
@@ -834,6 +863,248 @@
                     resultDiv.innerHTML = `
                         <div class="result error">
                             ❌ ${data.error || 'Erro ao reativar'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ❌ Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testCreateOrder() {
+            const resultDiv = document.getElementById('create-order-result');
+            
+            if (!authToken) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Você precisa fazer login como cliente primeiro!
+                    </div>
+                `;
+                return;
+            }
+
+            if (!supplierId) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Nenhum fornecedor cadastrado. Crie um fornecedor primeiro!
+                    </div>
+                `;
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="result info">⏳ Criando pedido...</div>';
+            
+            try {
+                const orderData = {
+                    supplier_id: supplierId,
+                    delivery_date: '2025-12-20',
+                    items: [
+                        {
+                            product_name: 'Arroz 5kg',
+                            quantity: 2,
+                            unit_price: 25.50
+                        },
+                        {
+                            product_name: 'Feijão 1kg',
+                            quantity: 3,
+                            unit_price: 8.90
+                        }
+                    ]
+                };
+
+                const response = await fetch('http://localhost:3000/api/orders', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify(orderData)
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    orderId = data.order.id;
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            ✅ ${data.message}<br>
+                            <strong>ID:</strong> ${data.order.id}<br>
+                            <strong>Total:</strong> R$ ${data.order.total_amount}<br>
+                            <strong>Crédito Restante:</strong> R$ ${data.remaining_credit}<br>
+                            <strong>Itens:</strong> ${data.order.items.length}<br>
+                            ${JSON.stringify(data.order, null, 2)}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            ❌ ${data.error || 'Erro ao criar pedido'}<br>
+                            ${data.details || ''}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ❌ Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testMyOrders() {
+            const resultDiv = document.getElementById('my-orders-result');
+            
+            if (!authToken) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Você precisa fazer login como cliente primeiro!
+                    </div>
+                `;
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="result info">⏳ Buscando pedidos...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/orders/my', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    if (data.orders.length > 0) {
+                        orderId = data.orders[0].id; // Salvar o primeiro pedido
+                    }
+                    
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            ✅ ${data.orders.length} pedido(s) encontrado(s)<br>
+                            <strong>Total:</strong> ${data.pagination.total}<br>
+                            ${JSON.stringify(data.orders, null, 2)}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            ❌ ${data.error || 'Erro ao buscar pedidos'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ❌ Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testSupplierOrders() {
+            const resultDiv = document.getElementById('supplier-orders-result');
+            
+            if (!supplierToken) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Você precisa fazer login como fornecedor primeiro!
+                    </div>
+                `;
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="result info">⏳ Buscando pedidos do fornecedor...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/orders/supplier/orders', {
+                    headers: {
+                        'Authorization': `Bearer ${supplierToken}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    if (data.orders.length > 0) {
+                        orderId = data.orders[0].id; // Salvar o primeiro pedido
+                    }
+                    
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            ✅ ${data.orders.length} pedido(s) recebido(s)<br>
+                            <strong>Total:</strong> ${data.pagination.total}<br>
+                            ${JSON.stringify(data.orders, null, 2)}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            ❌ ${data.error || 'Erro ao buscar pedidos'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ❌ Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testUpdateOrderStatus() {
+            const resultDiv = document.getElementById('update-order-result');
+            
+            if (!supplierToken) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Você precisa fazer login como fornecedor primeiro!
+                    </div>
+                `;
+                return;
+            }
+
+            if (!orderId) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Nenhum pedido selecionado. Liste os pedidos primeiro!
+                    </div>
+                `;
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="result info">⏳ Atualizando status do pedido...</div>';
+            
+            try {
+                const response = await fetch(`http://localhost:3000/api/orders/${orderId}/status`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${supplierToken}`
+                    },
+                    body: JSON.stringify({ status: 'confirmado' })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            ✅ ${data.message}<br>
+                            <strong>Novo Status:</strong> ${data.order.status}<br>
+                            ${JSON.stringify(data.order, null, 2)}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            ❌ ${data.error || 'Erro ao atualizar status'}
                         </div>
                     `;
                 }
