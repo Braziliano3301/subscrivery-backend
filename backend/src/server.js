@@ -3,6 +3,8 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import authRoutes from './routes/auth.routes.js';
 import supplierRoutes from './routes/supplier.routes.js';
+import planRoutes from './routes/plan.routes.js';
+import subscriptionRoutes from './routes/subscription.routes.js';
 
 // Carregar variáveis de ambiente
 dotenv.config();
@@ -37,6 +39,12 @@ app.use('/api/auth', authRoutes);
 
 // Rotas de fornecedores
 app.use('/api/suppliers', supplierRoutes);
+
+// Rotas de planos
+app.use('/api/plans', planRoutes);
+
+// Rotas de assinaturas
+app.use('/api/subscriptions', subscriptionRoutes);
 
 // Tratamento de erro 404
 app.use((req, res) => {

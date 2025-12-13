@@ -161,12 +161,49 @@
             <button onclick="testMySupplierProfile()">Ver Meu Perfil</button>
             <div id="my-supplier-result"></div>
         </div>
+
+        <!-- Teste 10: Listar Planos -->
+        <div class="test-section">
+            <h2>🔟 Listar Planos de Assinatura (Pública)</h2>
+            <button onclick="testListPlans()">Listar Planos</button>
+            <div id="list-plans-result"></div>
+        </div>
+
+        <!-- Teste 11: Criar Assinatura -->
+        <div class="test-section">
+            <h2>1️⃣1️⃣ Criar Assinatura (Requer Login Cliente)</h2>
+            <button onclick="testCreateSubscription()">Criar Assinatura</button>
+            <div id="create-subscription-result"></div>
+        </div>
+
+        <!-- Teste 12: Minha Assinatura -->
+        <div class="test-section">
+            <h2>1️⃣2️⃣ Minha Assinatura Ativa (Requer Login Cliente)</h2>
+            <button onclick="testMySubscription()">Ver Minha Assinatura</button>
+            <div id="my-subscription-result"></div>
+        </div>
+
+        <!-- Teste 13: Pausar Assinatura -->
+        <div class="test-section">
+            <h2>1️⃣3️⃣ Pausar Assinatura (Requer Login Cliente)</h2>
+            <button onclick="testPauseSubscription()">Pausar</button>
+            <div id="pause-subscription-result"></div>
+        </div>
+
+        <!-- Teste 14: Reativar Assinatura -->
+        <div class="test-section">
+            <h2>1️⃣4️⃣ Reativar Assinatura (Requer Login Cliente)</h2>
+            <button onclick="testResumeSubscription()">Reativar</button>
+            <div id="resume-subscription-result"></div>
+        </div>
     </div>
 
     <script>
         let authToken = null;
         let supplierToken = null;
         let supplierId = null;
+        let subscriptionId = null;
+        let selectedPlanId = null;
 
         async function testHealth() {
             const resultDiv = document.getElementById('health-result');
@@ -538,6 +575,265 @@
                     resultDiv.innerHTML = `
                         <div class="result error">
                             ❌ ${data.error || 'Erro ao buscar perfil'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ❌ Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testListPlans() {
+            const resultDiv = document.getElementById('list-plans-result');
+            resultDiv.innerHTML = '<div class="result info">⏳ Buscando planos...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/plans');
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Salvar ID do primeiro plano para usar nos testes
+                    if (data.plans && data.plans.length > 0) {
+                        selectedPlanId = data.plans[0].id;
+                    }
+                    
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            ✅ ${data.plans.length} plano(s) encontrado(s)!<br>
+                            ${JSON.stringify(data, null, 2)}
+                            <div class="token-box">
+                                💡 Primeiro plano salvo para testes: ${selectedPlanId}
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            ❌ ${data.error || 'Erro ao listar planos'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ❌ Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testCreateSubscription() {
+            const resultDiv = document.getElementById('create-subscription-result');
+            
+            if (!authToken) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Você precisa fazer login como cliente primeiro!
+                    </div>
+                `;
+                return;
+            }
+
+            if (!selectedPlanId) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Primeiro liste os planos para selecionar um!
+                    </div>
+                `;
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="result info">⏳ Criando assinatura...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/subscriptions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        plan_id: selectedPlanId
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    subscriptionId = data.subscription.id;
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            ✅ Assinatura criada!<br>
+                            ${JSON.stringify(data, null, 2)}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            ❌ ${data.error || 'Erro ao criar assinatura'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ❌ Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testMySubscription() {
+            const resultDiv = document.getElementById('my-subscription-result');
+            
+            if (!authToken) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Você precisa fazer login como cliente primeiro!
+                    </div>
+                `;
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="result info">⏳ Buscando sua assinatura...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/subscriptions/my', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    subscriptionId = data.subscription.id;
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            ✅ Sua assinatura ativa!<br>
+                            ${JSON.stringify(data, null, 2)}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            ❌ ${data.error || 'Erro ao buscar assinatura'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ❌ Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testPauseSubscription() {
+            const resultDiv = document.getElementById('pause-subscription-result');
+            
+            if (!authToken) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Você precisa fazer login como cliente primeiro!
+                    </div>
+                `;
+                return;
+            }
+
+            if (!subscriptionId) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Você precisa buscar sua assinatura primeiro!
+                    </div>
+                `;
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="result info">⏳ Pausando assinatura...</div>';
+            
+            try {
+                const response = await fetch(`http://localhost:3000/api/subscriptions/${subscriptionId}/pause`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            ✅ ${data.message}<br>
+                            ${JSON.stringify(data.subscription, null, 2)}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            ❌ ${data.error || 'Erro ao pausar'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ❌ Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testResumeSubscription() {
+            const resultDiv = document.getElementById('resume-subscription-result');
+            
+            if (!authToken) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Você precisa fazer login como cliente primeiro!
+                    </div>
+                `;
+                return;
+            }
+
+            if (!subscriptionId) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Você precisa buscar sua assinatura primeiro!
+                    </div>
+                `;
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="result info">⏳ Reativando assinatura...</div>';
+            
+            try {
+                const response = await fetch(`http://localhost:3000/api/subscriptions/${subscriptionId}/resume`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            ✅ ${data.message}<br>
+                            ${JSON.stringify(data.subscription, null, 2)}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            ❌ ${data.error || 'Erro ao reativar'}
                         </div>
                     `;
                 }
