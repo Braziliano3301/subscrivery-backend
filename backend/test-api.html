@@ -126,10 +126,47 @@
             <button onclick="testProfile()">Ver Perfil</button>
             <div id="profile-result"></div>
         </div>
+
+        <!-- Teste 5: Registrar Fornecedor -->
+        <div class="test-section">
+            <h2>5️⃣ Registrar Usuário Fornecedor</h2>
+            <button onclick="testRegisterSupplier()">Registrar Fornecedor</button>
+            <div id="register-supplier-result"></div>
+        </div>
+
+        <!-- Teste 6: Login Fornecedor -->
+        <div class="test-section">
+            <h2>6️⃣ Login Fornecedor</h2>
+            <button onclick="testLoginSupplier()">Login Fornecedor</button>
+            <div id="login-supplier-result"></div>
+        </div>
+
+        <!-- Teste 7: Criar Perfil de Fornecedor -->
+        <div class="test-section">
+            <h2>7️⃣ Criar Perfil de Fornecedor (Requer Login Fornecedor)</h2>
+            <button onclick="testCreateSupplierProfile()">Criar Perfil</button>
+            <div id="create-supplier-result"></div>
+        </div>
+
+        <!-- Teste 8: Listar Fornecedores -->
+        <div class="test-section">
+            <h2>8️⃣ Listar Todos os Fornecedores (Pública)</h2>
+            <button onclick="testListSuppliers()">Listar Fornecedores</button>
+            <div id="list-suppliers-result"></div>
+        </div>
+
+        <!-- Teste 9: Meu Perfil de Fornecedor -->
+        <div class="test-section">
+            <h2>9️⃣ Meu Perfil de Fornecedor (Requer Login Fornecedor)</h2>
+            <button onclick="testMySupplierProfile()">Ver Meu Perfil</button>
+            <div id="my-supplier-result"></div>
+        </div>
     </div>
 
     <script>
         let authToken = null;
+        let supplierToken = null;
+        let supplierId = null;
 
         async function testHealth() {
             const resultDiv = document.getElementById('health-result');
@@ -272,6 +309,229 @@
                         <div class="result success">
                             ✅ Perfil carregado!<br>
                             ${JSON.stringify(data.user, null, 2)}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            ❌ ${data.error || 'Erro ao buscar perfil'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ❌ Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testRegisterSupplier() {
+            const resultDiv = document.getElementById('register-supplier-result');
+            resultDiv.innerHTML = '<div class="result info">⏳ Criando usuário fornecedor...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: 'fornecedor@test.com',
+                        password: 'senha123',
+                        name: 'Fornecedor Teste',
+                        phone: '11987654321',
+                        user_type: 'fornecedor'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            ✅ Usuário fornecedor criado!<br>
+                            ID: ${data.user.id}<br>
+                            Email: ${data.user.email}<br>
+                            Nome: ${data.user.name}<br>
+                            Tipo: ${data.user.user_type}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            ❌ ${data.error || 'Erro ao criar usuário'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ❌ Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testLoginSupplier() {
+            const resultDiv = document.getElementById('login-supplier-result');
+            resultDiv.innerHTML = '<div class="result info">⏳ Fazendo login do fornecedor...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: 'fornecedor@test.com',
+                        password: 'senha123'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    supplierToken = data.token;
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            ✅ Login fornecedor realizado!<br>
+                            ${JSON.stringify(data.user, null, 2)}
+                            <div class="token-box">
+                                🔑 Token de fornecedor salvo!
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            ❌ ${data.error || 'Erro no login'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ❌ Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testCreateSupplierProfile() {
+            const resultDiv = document.getElementById('create-supplier-result');
+            
+            if (!supplierToken) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Você precisa fazer login como fornecedor primeiro!
+                    </div>
+                `;
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="result info">⏳ Criando perfil de fornecedor...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/suppliers', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${supplierToken}`
+                    },
+                    body: JSON.stringify({
+                        business_name: 'Supermercado Bom Preço',
+                        cnpj: '12345678000190',
+                        category: 'supermercado',
+                        address: 'Rua das Flores, 123',
+                        city: 'São Paulo',
+                        state: 'SP',
+                        zip_code: '01234567'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    supplierId = data.supplier.id;
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            ✅ Perfil de fornecedor criado!<br>
+                            ${JSON.stringify(data.supplier, null, 2)}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            ❌ ${data.error || 'Erro ao criar perfil'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ❌ Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testListSuppliers() {
+            const resultDiv = document.getElementById('list-suppliers-result');
+            resultDiv.innerHTML = '<div class="result info">⏳ Buscando fornecedores...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/suppliers');
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            ✅ ${data.suppliers.length} fornecedor(es) encontrado(s)!<br>
+                            ${JSON.stringify(data, null, 2)}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            ❌ ${data.error || 'Erro ao listar'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ❌ Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testMySupplierProfile() {
+            const resultDiv = document.getElementById('my-supplier-result');
+            
+            if (!supplierToken) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Você precisa fazer login como fornecedor primeiro!
+                    </div>
+                `;
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="result info">⏳ Buscando seu perfil...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/suppliers/me/profile', {
+                    headers: {
+                        'Authorization': `Bearer ${supplierToken}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            ✅ Seu perfil de fornecedor!<br>
+                            ${JSON.stringify(data.supplier, null, 2)}
                         </div>
                     `;
                 } else {

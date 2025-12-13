@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import authRoutes from './routes/auth.routes.js';
+import supplierRoutes from './routes/supplier.routes.js';
 
 // Carregar variáveis de ambiente
 dotenv.config();
@@ -33,6 +34,9 @@ app.get('/api/health', (req, res) => {
 
 // Rotas de autenticação
 app.use('/api/auth', authRoutes);
+
+// Rotas de fornecedores
+app.use('/api/suppliers', supplierRoutes);
 
 // Tratamento de erro 404
 app.use((req, res) => {
