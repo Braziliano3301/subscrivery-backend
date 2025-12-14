@@ -8,6 +8,7 @@ import supplierRoutes from './routes/supplier.routes.js';
 import planRoutes from './routes/plan.routes.js';
 import subscriptionRoutes from './routes/subscription.routes.js';
 import orderRoutes from './routes/order.routes.js';
+import paymentRoutes from './routes/payment.routes.js';
 
 // Carregar variáveis de ambiente
 dotenv.config();
@@ -27,6 +28,9 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Servir arquivos estáticos (test-api.html)
+app.use(express.static('.'));
 
 // Rota de health check
 app.get('/api/health', (req, res) => {
@@ -57,6 +61,9 @@ app.use('/api/subscriptions', subscriptionRoutes);
 
 // Rotas de pedidos
 app.use('/api/orders', orderRoutes);
+
+// Rotas de pagamentos
+app.use('/api/payments', paymentRoutes);
 
 // Tratamento de erro 404
 app.use((req, res) => {

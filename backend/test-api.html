@@ -224,6 +224,34 @@
             <button onclick="testUpdateOrderStatus()">Confirmar Pedido</button>
             <div id="update-order-result"></div>
         </div>
+
+        <!-- Teste 19: Criar Pagamento -->
+        <div class="test-section">
+            <h2>1️⃣9️⃣ Criar Pagamento (Requer Login Cliente)</h2>
+            <button onclick="testCreatePayment()">Criar Pagamento PIX R$200</button>
+            <div id="create-payment-result"></div>
+        </div>
+
+        <!-- Teste 20: Listar Meus Pagamentos -->
+        <div class="test-section">
+            <h2>2️⃣0️⃣ Listar Meus Pagamentos (Requer Login Cliente)</h2>
+            <button onclick="testMyPayments()">Ver Meus Pagamentos</button>
+            <div id="my-payments-result"></div>
+        </div>
+
+        <!-- Teste 21: Aprovar Pagamento -->
+        <div class="test-section">
+            <h2>2️⃣1️⃣ Aprovar Pagamento (Requer Login Cliente)</h2>
+            <button onclick="testApprovePayment()">Aprovar Último Pagamento</button>
+            <div id="approve-payment-result"></div>
+        </div>
+
+        <!-- Teste 22: Estatísticas de Pagamentos -->
+        <div class="test-section">
+            <h2>2️⃣2️⃣ Estatísticas de Pagamentos (Requer Login Cliente)</h2>
+            <button onclick="testPaymentStats()">Ver Estatísticas</button>
+            <div id="payment-stats-result"></div>
+        </div>
     </div>
 
     <script>
@@ -233,6 +261,7 @@
         let subscriptionId = null;
         let selectedPlanId = null;
         let orderId = null;
+        let paymentId = null;
 
         async function testHealth() {
             const resultDiv = document.getElementById('health-result');
@@ -1105,6 +1134,248 @@
                     resultDiv.innerHTML = `
                         <div class="result error">
                             ❌ ${data.error || 'Erro ao atualizar status'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ❌ Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        // ===== TESTES DE PAGAMENTOS =====
+        
+        async function testCreatePayment() {
+            const resultDiv = document.getElementById('create-payment-result');
+            
+            if (!authToken) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Você precisa fazer login como cliente primeiro!
+                    </div>
+                `;
+                return;
+            }
+
+            if (!subscriptionId) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Nenhuma assinatura ativa. Crie uma assinatura primeiro!
+                    </div>
+                `;
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="result info">⏳ Criando pagamento...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/payments', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        subscription_id: subscriptionId,
+                        amount: 200.00,
+                        payment_method: 'pix',
+                        transaction_id: `PIX-${Date.now()}`
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    paymentId = data.data.id;
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            ✅ ${data.message}<br>
+                            <strong>ID do Pagamento:</strong> ${paymentId}<br>
+                            <strong>Valor:</strong> R$ ${data.data.amount}<br>
+                            <strong>Método:</strong> ${data.data.payment_method}<br>
+                            <strong>Status:</strong> ${data.data.status}<br>
+                            ${JSON.stringify(data.data, null, 2)}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            ❌ ${data.message || 'Erro ao criar pagamento'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ❌ Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testMyPayments() {
+            const resultDiv = document.getElementById('my-payments-result');
+            
+            if (!authToken) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Você precisa fazer login como cliente primeiro!
+                    </div>
+                `;
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="result info">⏳ Buscando pagamentos...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/payments/my', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    const count = data.data.length;
+                    const paymentsList = data.data.map(p => `
+                        📄 ${p.payment_method.toUpperCase()} - R$ ${p.amount} - ${p.status}
+                        ID: ${p.id}
+                        Data: ${new Date(p.payment_date).toLocaleString('pt-BR')}
+                    `).join('\n---\n');
+                    
+                    if (count > 0 && !paymentId) {
+                        paymentId = data.data[0].id;
+                    }
+                    
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            ✅ Encontrados ${count} pagamento(s)<br>
+                            <strong>Total:</strong> ${data.pagination.total}<br><br>
+                            ${paymentsList || 'Nenhum pagamento encontrado'}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            ❌ ${data.message || 'Erro ao buscar pagamentos'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ❌ Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testApprovePayment() {
+            const resultDiv = document.getElementById('approve-payment-result');
+            
+            if (!authToken) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Você precisa fazer login como cliente primeiro!
+                    </div>
+                `;
+                return;
+            }
+
+            if (!paymentId) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Nenhum pagamento selecionado. Crie ou liste pagamentos primeiro!
+                    </div>
+                `;
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="result info">⏳ Aprovando pagamento...</div>';
+            
+            try {
+                const response = await fetch(`http://localhost:3000/api/payments/${paymentId}/status`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        status: 'aprovado',
+                        transaction_id: `CONFIRMED-${Date.now()}`
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            ✅ ${data.message}<br>
+                            <strong>Status:</strong> ${data.data.status}<br>
+                            <strong>Transaction ID:</strong> ${data.data.transaction_id}<br>
+                            ${JSON.stringify(data.data, null, 2)}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            ❌ ${data.message || 'Erro ao aprovar pagamento'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ❌ Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testPaymentStats() {
+            const resultDiv = document.getElementById('payment-stats-result');
+            
+            if (!authToken) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Você precisa fazer login como cliente primeiro!
+                    </div>
+                `;
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="result info">⏳ Buscando estatísticas...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/payments/stats', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    const stats = data.data;
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            ✅ Estatísticas de Pagamentos<br><br>
+                            <strong>Total de Pagamentos:</strong> ${stats.total_payments}<br>
+                            <strong>Total Pago:</strong> R$ ${stats.total_paid.toFixed(2)}<br>
+                            <strong>Total Pendente:</strong> R$ ${stats.total_pending.toFixed(2)}<br>
+                            <strong>Ticket Médio:</strong> R$ ${stats.avg_payment.toFixed(2)}<br><br>
+                            ${JSON.stringify(stats, null, 2)}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            ❌ ${data.message || 'Erro ao buscar estatísticas'}
                         </div>
                     `;
                 }

@@ -1,8 +1,9 @@
 # 📋 Estrutura do Projeto Subscrivery - Para a Equipe
 
-**Data:** 12/12/2025  
-**Status:** Estrutura completa + Backend com autenticação implementado  
-**Banco de Dados:** PostgreSQL (Neon Cloud) ✅
+**Data:** 14/12/2025  
+**Status:** Backend 90% completo (24 endpoints) + Swagger + CRUD Pedidos  
+**Banco de Dados:** PostgreSQL (Neon Cloud) ✅  
+**Repositórios:** Backend e Frontend separados
 
 ---
 
@@ -40,25 +41,8 @@ Subscrivery/
 │   ├── .env.example                      # Template de variáveis
 │   └── package.json                      # ✅ Dependências instaladas
 │
-├── frontend/                             # React + Vite + Tailwind
-│   ├── public/                           # Arquivos estáticos
-│   ├── src/
-│   │   ├── assets/                       # Imagens, ícones, fontes
-│   │   ├── components/                   # Componentes reutilizáveis
-│   │   ├── contexts/                     # Context API (AuthContext)
-│   │   ├── hooks/                        # Custom hooks
-│   │   ├── pages/                        # Páginas da aplicação
-│   │   ├── services/                     # API calls
-│   │   ├── utils/                        # Funções utilitárias
-│   │   ├── App.jsx                       # ✅ Componente principal
-│   │   ├── main.jsx                      # ✅ Entry point
-│   │   └── index.css                     # ✅ Estilos globais + Tailwind
-│   │
-│   ├── index.html                        # ✅ HTML base
-│   ├── package.json                      # ✅ Dependências configuradas
-│   ├── vite.config.js                    # ✅ Configuração Vite
-│   ├── tailwind.config.js                # ✅ Configuração Tailwind
-│   └── postcss.config.js                 # ✅ PostCSS
+├── [frontend/]                           # ⚠️ MOVIDO PARA REPOSITÓRIO SEPARADO
+│   # Repositório: https://github.com/otaviolap/subscrivery-frontend
 │
 ├── docs/                                 # Documentação completa
 │   ├── api/
@@ -83,7 +67,7 @@ Subscrivery/
 
 ## 🛠️ Tecnologias Utilizadas
 
-### Backend
+### Backend (Repositório Atual)
 - **Node.js** 18+
 - **Express** 4.18 - Framework web
 - **PostgreSQL** 16 - Banco de dados (Neon Cloud)
@@ -91,13 +75,11 @@ Subscrivery/
 - **Bcrypt** - Hash de senhas
 - **Express Validator** - Validação de dados
 - **CORS** - Controle de acesso
+- **Swagger** - Documentação OpenAPI 3.0
 
-### Frontend
-- **React** 18.2
-- **Vite** 5.0 - Build tool
-- **React Router** 6.20 - Roteamento
-- **Tailwind CSS** 3.4 - Estilização
-- **Axios** 1.6 - HTTP client
+### Frontend (Repositório Separado)
+- **Repositório:** https://github.com/otaviolap/subscrivery-frontend
+- **Tecnologias:** React 18.2, Vite 5.0, Tailwind CSS 3.4, React Router 6.20
 
 ### Banco de Dados
 - **Neon PostgreSQL** (cloud, grátis)
@@ -107,23 +89,21 @@ Subscrivery/
 
 ## ✅ O Que Já Está Implementado
 
-### ✅ Backend (50% completo)
-   ✅ Autenticação JWT (register, login, profile)  
-   ✅ User Model com bcrypt  
-   ✅ CRUD Fornecedores (completo - 6 endpoints)  
-   ⏳ CRUD Assinaturas (próximo)  
-   ⏳ CRUD Pedidos  
-   ⏳ Listagem de Planos (GET /api/plans)
+### ✅ Backend (90% completo - 24 endpoints)
+   ✅ Autenticação JWT (4 endpoints: register, login, profile GET/PUT)  
+   ✅ CRUD Fornecedores (6 endpoints com filtros e paginação)  
+   ✅ Planos (2 endpoints: listar, detalhes)  
+   ✅ CRUD Assinaturas (6 endpoints: criar, pausar, retomar, cancelar)  
+   ✅ CRUD Pedidos (6 endpoints: criar, listar, atualizar status, cancelar)  
+   ✅ Swagger/OpenAPI 3.0 (documentação completa em /api-docs)  
+   ✅ Validações completas (express-validator)  
+   ✅ Middlewares de autenticação e permissões  
+   ✅ Gestão automática de créditos em pedidos  
+   ✅ Interface de testes (test-api.html com 18 botões)
 
-### ⏳ Frontend (10% completo)
-   ✅ Estrutura criada (React + Vite + Tailwind)  
-   ⏳ AuthContext e integração API  
-   ⏳ Página Login/Register  
-   ⏳ Dashboard Cliente  
-   ⏳ Dashboard Fornecedor  
-   ⏳ Marketplace (listar fornecedores)  
-   ⏳ Página Assinatura  
-   ⏳ Página Pedidos
+### ⏳ Frontend (Repositório Separado)
+   📍 Repositório: https://github.com/otaviolap/subscrivery-frontend  
+   ⏳ Em desenvolvimento pela equipe
 
 ### ⏳ Design (0% completo)
    ⏳ Definir paleta de cores  
@@ -140,29 +120,69 @@ Subscrivery/
 
 ## 📊 Progresso Detalhado
 
-### Backend ✅✅✅⚪⚪⚪ (50%)
-1. ✅ **Autenticação JWT** completa e testada:
-   - `POST /api/auth/register` - Cadastro de usuário ✅ TESTADO
-   - `POST /api/auth/login` - Login ✅ TESTADO
-   - `GET /api/auth/profile` - Perfil do usuário (protegido) ✅ TESTADO
-   - `PUT /api/auth/profile` - Atualizar perfil (protegido) ✅ IMPLEMENTADO
-2. ✅ **CRUD Fornecedores** completo e testado:
-   - `POST /api/suppliers` - Criar perfil ✅ TESTADO
-   - `GET /api/suppliers` - Listar com filtros ✅ TESTADO
-   - `GET /api/suppliers/:id` - Detalhes ✅ IMPLEMENTADO
-   - `GET /api/suppliers/me/profile` - Meu perfil ✅ TESTADO
-   - `PUT /api/suppliers/:id` - Atualizar ✅ IMPLEMENTADO
-   - `DELETE /api/suppliers/:id` - Deletar ✅ IMPLEMENTADO
-3. ✅ **Middlewares**:
-   - Autenticação JWT ✅
-   - Validação de dados ✅
-   - Verificação de permissões (cliente/fornecedor) ✅
-   - CORS configurado ✅
-4. ✅ **Models**: UserModel + SupplierModel com CRUD completo
-5. ✅ **Database Schema**: 7 tabelas criadas no banco
-6. ✅ **Página de Testes** (test-api.html) - Interface visual para testar API
-7. ✅ **Usuários criados**: cliente@test.com + fornecedor@test.com
-8. ✅ **Git**: Commit realizado (3be4475)
+### Backend ✅✅✅✅✅⚪ (90%)
+1. ✅ **Autenticação JWT** (4 endpoints):
+   - `POST /api/auth/register` - Cadastro ✅
+   - `POST /api/auth/login` - Login ✅
+   - `GET /api/auth/profile` - Perfil ✅
+   - `PUT /api/auth/profile` - Atualizar perfil ✅
+
+2. ✅ **CRUD Fornecedores** (6 endpoints):
+   - `POST /api/suppliers` - Criar ✅
+   - `GET /api/suppliers` - Listar (filtros: city, state, category, search, paginação) ✅
+   - `GET /api/suppliers/:id` - Detalhes ✅
+   - `GET /api/suppliers/me/profile` - Meu perfil ✅
+   - `PUT /api/suppliers/:id` - Atualizar ✅
+   - `DELETE /api/suppliers/:id` - Deletar (soft delete) ✅
+
+3. ✅ **Planos** (2 endpoints):
+   - `GET /api/plans` - Listar 3 planos ✅
+   - `GET /api/plans/:id` - Detalhes do plano ✅
+
+4. ✅ **CRUD Assinaturas** (6 endpoints):
+   - `POST /api/subscriptions` - Criar assinatura ✅
+   - `GET /api/subscriptions/my` - Minha assinatura ativa ✅
+   - `GET /api/subscriptions/history` - Histórico ✅
+   - `PUT /api/subscriptions/:id/pause` - Pausar ✅
+   - `PUT /api/subscriptions/:id/resume` - Retomar ✅
+   - `PUT /api/subscriptions/:id/cancel` - Cancelar ✅
+
+5. ✅ **CRUD Pedidos** (6 endpoints):
+   - `POST /api/orders` - Criar pedido (valida crédito) ✅
+   - `GET /api/orders/my` - Meus pedidos (cliente) ✅
+   - `GET /api/orders/:id` - Detalhes do pedido ✅
+   - `GET /api/orders/supplier/orders` - Pedidos recebidos (fornecedor) ✅
+   - `PUT /api/orders/:id/status` - Atualizar status (fornecedor) ✅
+   - `PUT /api/orders/:id/cancel` - Cancelar pedido (devolve crédito) ✅
+
+6. ✅ **Documentação Swagger/OpenAPI**:
+   - Rota: `GET /api-docs` - Interface interativa ✅
+   - 24 endpoints documentados ✅
+   - Schemas definidos (User, Supplier, Plan, Subscription, Order) ✅
+   - Autenticação JWT Bearer configurada ✅
+
+7. ✅ **Arquitetura**:
+   - 5 Models: User, Supplier, Plan, Subscription, Order ✅
+   - 5 Controllers com validações ✅
+   - 5 Rotas protegidas (authMiddleware, isClient, isSupplier) ✅
+   - Transações de banco para integridade de dados ✅
+
+8. ✅ **Funcionalidades Avançadas**:
+   - Gestão automática de créditos (dedução em pedidos) ✅
+   - Devolução de crédito em cancelamento ✅
+   - Validação de assinatura ativa antes de criar pedido ✅
+   - Prevenção de assinaturas duplicadas ✅
+   - Soft delete de fornecedores ✅
+
+9. ✅ **Testes**:
+   - Interface test-api.html com 18 botões de teste ✅
+   - 2 usuários de teste criados ✅
+   - 1 fornecedor cadastrado ✅
+   - 1 assinatura ativa ✅
+
+10. ✅ **Git**:
+   - 4 commits: Fornecedores, Assinaturas, Swagger, Pedidos ✅
+   - Repositório: https://github.com/otaviolap/subscrivery-backend ✅
 
 ### Banco de Dados (Tabelas Criadas)
 - ✅ `users` - Usuários (clientes + fornecedores)
@@ -173,11 +193,9 @@ Subscrivery/
 - ✅ `order_items` - Itens de cada pedido
 - ✅ `payments` - Histórico de pagamentos
 
-### Frontend
-1. ✅ **Estrutura** completa de pastas
-2. ✅ **Vite + React** configurado
-3. ✅ **Tailwind CSS** configurado
-4. ✅ **Componente base** (App.jsx) criado
+### Frontend (Repositório Separado)
+1. 📍 **Repositório:** https://github.com/otaviolap/subscrivery-frontend
+2. ⏳ **Em desenvolvimento** pela equipe de frontend
 
 ### Documentação
 1. ✅ **README.md** - Overview completo
@@ -255,34 +273,43 @@ npm run dev
 
 ---
 
-## 📝 Próximos Passos (Para Divisão de Tarefas)
+## 📝 Próximos Passos
 
-### Design (Dias 1-2)
-- [ ] Criar logo (PNG, SVG, AI)
-- [ ] Definir paleta de cores final
-- [ ] Manual de marca (PDF)
-- [ ] Protótipo Figma (desktop + mobile)
+### Backend (Pendente - 10%)
+- [ ] **CRUD Pagamentos** (payments table)
+  - POST /api/payments - Registrar pagamento
+  - GET /api/payments/my - Meu histórico
+  - GET /api/payments/:id - Detalhes
 
-### Backend (Dias 3-5)
-- [ ] CRUD de Fornecedores
-- [ ] CRUD de Assinaturas
-- [ ] CRUD de Pedidos
-- [ ] Listagem de Planos (GET /api/plans)
-- [ ] Documentação Swagger/Postman
+- [ ] **Renovação Automática de Assinaturas**
+  - Cron job para verificar next_billing_date
+  - Renovar crédito automaticamente
+  - Enviar notificação (opcional)
 
-### Frontend (Dias 6-10)
+- [ ] **Relatórios e Dashboards**
+  - GET /api/reports/supplier/:id - Vendas do fornecedor
+  - GET /api/reports/client - Gastos do cliente
+
+- [ ] **Melhorias Opcionais**
+  - Upload de imagem de perfil (Cloudinary)
+  - Envio de email (Nodemailer)
+  - Rate limiting (express-rate-limit)
+  - Logs estruturados (Winston)
+
+### Frontend (Em outro repositório)
+- [ ] Integração com API backend
 - [ ] Páginas de Login/Cadastro
-- [ ] AuthContext e rotas protegidas
-- [ ] Página de Planos
 - [ ] Dashboard Cliente
 - [ ] Dashboard Fornecedor
-- [ ] Responsividade
+- [ ] Marketplace de fornecedores
+- [ ] Gestão de assinaturas e pedidos
 
-### DevOps (Dias 11-14)
-- [ ] Deploy Backend (Railway/Heroku)
-- [ ] Deploy Frontend (Vercel)
-- [ ] Configurar CI/CD
-- [ ] Testes finais em produção
+### DevOps
+- [ ] Deploy Backend → Railway/Render
+- [ ] Deploy Frontend → Vercel
+- [ ] Configurar variáveis de ambiente em produção
+- [ ] Testes de integração
+- [ ] Monitoramento (opcional)
 
 ---
 
@@ -380,8 +407,11 @@ POST http://localhost:3000/api/auth/login
 
 ---
 
-**Última Atualização:** 13/12/2025 às 23h15  
-**Responsável pelo Setup:** Equipe Subscrivery  
-**Status Geral:** ✅ Backend 50% (Auth + Fornecedores) | ⏳ Frontend 10% | ⏳ Design 0%  
-**Próximo:** CRUD Assinaturas + GET /api/plans  
-**Deadline:** 26/12/2025 (13 dias restantes)
+**Última Atualização:** 14/12/2025 às 02h30  
+**Responsável:** Equipe Subscrivery  
+**Status Geral:** ✅ Backend 90% (24 endpoints + Swagger) | ⏳ Frontend (repo separado) | ⏳ Deploy 0%  
+**Próximo:** CRUD Pagamentos OU Deploy backend OU integração com frontend  
+**Deadline:** 26/12/2025 (12 dias restantes)  
+**Repositórios:**  
+- Backend: https://github.com/otaviolap/subscrivery-backend  
+- Frontend: https://github.com/otaviolap/subscrivery-frontend
