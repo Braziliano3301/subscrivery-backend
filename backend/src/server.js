@@ -22,10 +22,17 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(cors({
-  origin: '*', // Permitir todas as origens em desenvolvimento
-  credentials: true
-}));
+// Configuração de CORS dinâmica (desenvolvimento vs produção)
+const corsOptions = {
+  origin: process.env.NODE_ENV === 'production' 
+    ? process.env.FRONTEND_URL  // Em produção: apenas frontend autorizado
+    : '*',                       // Em desenvolvimento: qualquer origem
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -38,6 +45,26 @@ app.get('/api/health', (req, res) => {
     status: 'ok',
     message: 'Subscrivery API está rodando',
     timestamp: new Date().toISOString()
+  });
+});
+
+// Rota de status detalhado (para monitoramento)
+app.get('/api/status', (req, res) => {
+  res.json({
+    status: 'ok',
+    service: 'Subscrivery Backend API',
+    version: '1.0.0',
+    environment: process.env.NODE_ENV || 'development',
+    timestamp: new Date().toISOString(),
+    endpoints: {
+      auth: '/api/auth',
+      suppliers: '/api/suppliers',
+      plans: '/api/plans',
+      subscriptions: '/api/subscriptions',
+      orders: '/api/orders',
+      payments: '/api/payments',
+      docs: '/api-docs'
+    }
   });
 });
 
