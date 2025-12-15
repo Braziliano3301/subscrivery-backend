@@ -1,7 +1,7 @@
 # 📋 Estrutura do Projeto Subscrivery - Para a Equipe
 
 **Data:** 14/12/2025  
-**Status:** Backend 90% completo (24 endpoints) + Swagger + CRUD Pedidos  
+**Status:** Backend 100% completo (28 endpoints) + Swagger + Git atualizado  
 **Banco de Dados:** PostgreSQL (Neon Cloud) ✅  
 **Repositórios:** Backend e Frontend separados
 
@@ -28,10 +28,20 @@ Subscrivery/
 │   │   │   └── validate.middleware.js   # ✅ Validação de requisições
 │   │   │
 │   │   ├── models/
-│   │   │   └── user.model.js            # ✅ Model de usuários
+   │   │   ├── user.model.js            # ✅ Model de usuários
+   │   │   ├── supplier.model.js        # ✅ Model de fornecedores
+   │   │   ├── plan.model.js            # ✅ Model de planos
+   │   │   ├── subscription.model.js    # ✅ Model de assinaturas
+   │   │   ├── order.model.js           # ✅ Model de pedidos
+   │   │   └── payment.model.js         # ✅ Model de pagamentos
 │   │   │
 │   │   ├── routes/
-│   │   │   └── auth.routes.js           # ✅ Rotas de autenticação
+   │   │   ├── auth.routes.js           # ✅ Rotas de autenticação
+   │   │   ├── supplier.routes.js       # ✅ Rotas de fornecedores
+   │   │   ├── plan.routes.js           # ✅ Rotas de planos
+   │   │   ├── subscription.routes.js   # ✅ Rotas de assinaturas
+   │   │   ├── order.routes.js          # ✅ Rotas de pedidos
+   │   │   └── payment.routes.js        # ✅ Rotas de pagamentos
 │   │   │
 │   │   ├── services/                     # (vazio - para lógica de negócio)
 │   │   ├── utils/                        # (vazio - funções auxiliares)
@@ -89,38 +99,322 @@ Subscrivery/
 
 ## ✅ O Que Já Está Implementado
 
-### ✅ Backend (90% completo - 24 endpoints)
+### ✅ Backend (100% completo - 28 endpoints)
    ✅ Autenticação JWT (4 endpoints: register, login, profile GET/PUT)  
    ✅ CRUD Fornecedores (6 endpoints com filtros e paginação)  
    ✅ Planos (2 endpoints: listar, detalhes)  
    ✅ CRUD Assinaturas (6 endpoints: criar, pausar, retomar, cancelar)  
    ✅ CRUD Pedidos (6 endpoints: criar, listar, atualizar status, cancelar)  
+   ✅ CRUD Pagamentos (5 endpoints: criar, listar, detalhes, atualizar status, estatísticas)  
    ✅ Swagger/OpenAPI 3.0 (documentação completa em /api-docs)  
    ✅ Validações completas (express-validator)  
    ✅ Middlewares de autenticação e permissões  
    ✅ Gestão automática de créditos em pedidos  
-   ✅ Interface de testes (test-api.html com 18 botões)
+   ✅ Sistema de pagamentos com múltiplos métodos  
+   ✅ Interface de testes (test-api.html com 22 botões)
 
 ### ⏳ Frontend (Repositório Separado)
    📍 Repositório: https://github.com/otaviolap/subscrivery-frontend  
    ⏳ Em desenvolvimento pela equipe
 
-### ⏳ Design (0% completo)
-   ⏳ Definir paleta de cores  
-   ⏳ Criar logo (Figma/Canva)  
-   ⏳ Protótipo Figma (telas principais)  
-   ⏳ Design system (componentes)
+### ⚠️ Design (0% completo - PRIORIDADE ALTA - DIFICULDADE DO TIME)
+   ⏳ **Logotipo** (PNG, SVG + fonte utilizada)  
+   ⏳ **Manual da marca** (PDF com aplicações corretas)  
+   ⏳ **Paleta de cores documentada** (códigos hex, RGB, quando usar cada cor)  
+   ⏳ **Protótipo completo no Figma** (todas as telas principais)  
+   ⏳ **Acesso concedido ao avaliador** (link público ou convite)  
+   
+   **Ferramentas sugeridas:**
+   - Canva (logotipo simples, gratuito)
+   - Figma (protótipos, gratuito)
+   - Coolors.co (paleta de cores)
+   - ChatGPT/Copilot (ajuda com branding, conceito)
 
-### ⏳ Deploy (0% completo)
-   ⏳ Backend → Railway/Heroku  
-   ⏳ Frontend → Vercel  
-   ⏳ Testes em produção
+### ✅ Deploy Backend (100% completo)
+   ✅ Backend → Railway (https://subscrivery-backend-production.up.railway.app)  
+   ✅ 28 endpoints testados e funcionando em produção  
+   ✅ Swagger disponível: /api-docs  
+   ⏳ Frontend → Vercel (aguardando equipe)  
+   ⏳ Integração frontend + backend
+
+---
+
+## 🎨 Mapeamento de Telas (Design + Frontend)
+
+### 📱 Versões: Desktop + Mobile Responsivo
+
+---
+
+### **1. TELAS PÚBLICAS (Sem Login)**
+
+#### 1.1 Landing Page / Home
+- **Desktop:**
+  - Hero section com proposta de valor
+  - Como funciona (3 passos)
+  - Planos de assinatura (cards comparativos)
+  - Fornecedores parceiros (carrossel)
+  - Depoimentos/Reviews
+  - FAQ
+  - Footer (links, redes sociais)
+  - CTA: "Começar Agora" → Cadastro
+  
+- **Mobile:**
+  - Menu hamburguer
+  - Hero simplificado
+  - Sections empilhadas verticalmente
+  - Cards de planos em carrossel
+  - CTA fixo no rodapé
+
+#### 1.2 Sobre Nós
+- **Desktop/Mobile:**
+  - Missão, Visão, Valores
+  - Time (opcional)
+  - Impacto social/sustentabilidade
+  - CTA para cadastro
+
+#### 1.3 Marketplace Público (Lista de Fornecedores)
+- **Desktop:**
+  - Grade de cards de fornecedores (3-4 colunas)
+  - Filtros laterais: Categoria, Cidade, Estado
+  - Barra de busca no topo
+  - Paginação
+  
+- **Mobile:**
+  - Lista vertical (1 coluna)
+  - Filtros em modal/drawer
+  - Busca expansível
+  - Scroll infinito ou paginação
+
+#### 1.4 Detalhes do Fornecedor (Público)
+- **Desktop/Mobile:**
+  - Logo/foto do estabelecimento
+  - Nome, categoria, endereço
+  - Descrição
+  - Produtos disponíveis (se aplicável)
+  - CTA: "Assinar para comprar"
+
+---
+
+### **2. AUTENTICAÇÃO**
+
+#### 2.1 Login
+- **Desktop:**
+  - Split screen (imagem esquerda + formulário direita)
+  - Email, Senha
+  - "Esqueci minha senha"
+  - "Não tem conta? Cadastre-se"
+  
+- **Mobile:**
+  - Formulário full screen
+  - Logo no topo
+  - Inputs empilhados
+
+#### 2.2 Cadastro (Cliente)
+- **Desktop/Mobile:**
+  - Nome, Email, Telefone, Senha, Confirmar Senha
+  - User Type = "cliente" (oculto ou pré-selecionado)
+  - Checkbox "Li e aceito os termos"
+  - "Já tem conta? Faça login"
+
+#### 2.3 Cadastro (Fornecedor)
+- **Desktop/Mobile:**
+  - Etapa 1: Dados do usuário (igual cliente)
+  - Etapa 2: Dados do negócio (Nome fantasia, CNPJ, Categoria, Endereço, CEP)
+  - Progresso visual (2 steps)
+
+#### 2.4 Esqueci Minha Senha
+- **Desktop/Mobile:**
+  - Campo email
+  - "Enviar link de recuperação"
+  - Mensagem de sucesso
+
+---
+
+### **3. ÁREA DO CLIENTE**
+
+#### 3.1 Dashboard Cliente
+- **Desktop:**
+  - Sidebar navegação (Home, Assinaturas, Pedidos, Pagamentos, Perfil)
+  - Cards de resumo: Assinatura ativa, Crédito disponível, Pedidos pendentes
+  - Gráfico de gastos (opcional)
+  - Últimos pedidos (tabela)
+  - CTA: "Fazer Novo Pedido"
+  
+- **Mobile:**
+  - Bottom navigation bar ou menu hamburguer
+  - Cards empilhados
+  - Lista de últimos pedidos
+
+#### 3.2 Minha Assinatura
+- **Desktop/Mobile:**
+  - Card do plano atual (nome, preço, crédito)
+  - Status (ativa/pausada/cancelada)
+  - Próxima cobrança
+  - Crédito restante (progress bar)
+  - Botões: Pausar, Retomar, Cancelar, Alterar Plano
+  - Histórico de assinaturas (tabela)
+
+#### 3.3 Marketplace (Cliente Logado)
+- **Desktop/Mobile:**
+  - Igual marketplace público
+  - Mas cards de fornecedores têm CTA "Fazer Pedido"
+  - Indicador de crédito disponível no topo
+
+#### 3.4 Criar Pedido
+- **Desktop:**
+  - Seleção de fornecedor (se não veio do marketplace)
+  - Lista de produtos (tabela editável)
+  - Adicionar item: Nome, Quantidade, Preço unitário
+  - Subtotal e Total automático
+  - Data de entrega
+  - Validação de crédito em tempo real
+  - Botão: "Confirmar Pedido"
+  
+- **Mobile:**
+  - Formulário step-by-step
+  - Items em lista com botão "+"
+  - Resumo do pedido fixo no rodapé
+
+#### 3.5 Meus Pedidos
+- **Desktop:**
+  - Tabela: Data, Fornecedor, Total, Status, Ações
+  - Filtros: Status, Período
+  - Paginação
+  - Ação: Ver Detalhes, Cancelar (se pendente)
+  
+- **Mobile:**
+  - Cards verticais
+  - Filtros em modal
+  - Swipe para ações rápidas
+
+#### 3.6 Detalhes do Pedido
+- **Desktop/Mobile:**
+  - ID do pedido
+  - Fornecedor
+  - Items (tabela)
+  - Status (timeline visual)
+  - Data de entrega
+  - Total
+  - Botão Cancelar (se aplicável)
+
+#### 3.7 Pagamentos
+- **Desktop:**
+  - Tabela: Data, Método, Valor, Status
+  - Filtros: Status, Período
+  - Cards de estatísticas: Total pago, Pendente, Ticket médio
+  
+- **Mobile:**
+  - Lista de cards
+  - Stats no topo
+  - Filtros em modal
+
+#### 3.8 Criar Pagamento
+- **Desktop/Mobile:**
+  - Selecionar assinatura
+  - Valor (pré-preenchido com valor do plano)
+  - Método: PIX, Cartão, Boleto, Transferência
+  - QR Code PIX (se PIX)
+  - Botão: "Confirmar Pagamento"
+
+#### 3.9 Perfil do Cliente
+- **Desktop/Mobile:**
+  - Foto de perfil (upload)
+  - Nome, Email, Telefone
+  - Botão: "Salvar Alterações"
+  - "Alterar Senha"
+  - "Excluir Conta"
+
+---
+
+### **4. ÁREA DO FORNECEDOR**
+
+#### 4.1 Dashboard Fornecedor
+- **Desktop:**
+  - Sidebar navegação (Home, Pedidos, Perfil)
+  - Cards: Pedidos pendentes, Pedidos hoje, Total do mês
+  - Gráfico de vendas (opcional)
+  - Lista de pedidos recentes (tabela)
+  
+- **Mobile:**
+  - Bottom nav
+  - Cards empilhados
+  - Lista simplificada
+
+#### 4.2 Pedidos Recebidos
+- **Desktop:**
+  - Tabela: Data, Cliente, Items, Total, Status, Ações
+  - Filtros: Status, Período
+  - Ação: Ver Detalhes, Atualizar Status
+  
+- **Mobile:**
+  - Cards verticais
+  - Badge de status colorido
+  - Botões de ação rápida
+
+#### 4.3 Detalhes do Pedido (Fornecedor)
+- **Desktop/Mobile:**
+  - Cliente (nome, telefone)
+  - Items (tabela)
+  - Total
+  - Status atual
+  - Botões: Confirmar, Pronto para Entrega, Entregar, Cancelar
+  - Timeline de status
+
+#### 4.4 Perfil do Fornecedor
+- **Desktop/Mobile:**
+  - Logo (upload)
+  - Nome fantasia, CNPJ (não editável)
+  - Categoria
+  - Endereço completo, CEP
+  - Descrição do negócio
+  - Botão: "Salvar Alterações"
+  - "Desativar Perfil"
+
+---
+
+### **5. COMPONENTES COMPARTILHADOS**
+
+- **Header/Navbar**
+  - Desktop: Logo, Menu, Avatar dropdown
+  - Mobile: Logo, Hamburguer, Avatar
+
+- **Footer**
+  - Links, Redes sociais, Copyright
+
+- **Modals**
+  - Confirmação (Cancelar pedido, Pausar assinatura, etc)
+  - Sucesso/Erro
+
+- **Toast Notifications**
+  - Feedback de ações (sucesso, erro, info)
+
+- **Loading States**
+  - Skeleton screens
+  - Spinners
+
+- **Empty States**
+  - "Nenhum pedido encontrado"
+  - "Nenhum fornecedor disponível"
+  - Ilustrações + CTA
+
+---
+
+### **📊 RESUMO**
+
+**Total de Telas Principais:** 23 telas
+- Públicas: 4
+- Autenticação: 4
+- Cliente: 9
+- Fornecedor: 4
+- Compartilhadas: 2
+
+**Todas com versão Desktop + Mobile responsivo**
 
 ---
 
 ## 📊 Progresso Detalhado
 
-### Backend ✅✅✅✅✅⚪ (90%)
+### Backend ✅✅✅✅✅✅ (100%)
 1. ✅ **Autenticação JWT** (4 endpoints):
    - `POST /api/auth/register` - Cadastro ✅
    - `POST /api/auth/login` - Login ✅
@@ -155,16 +449,23 @@ Subscrivery/
    - `PUT /api/orders/:id/status` - Atualizar status (fornecedor) ✅
    - `PUT /api/orders/:id/cancel` - Cancelar pedido (devolve crédito) ✅
 
-6. ✅ **Documentação Swagger/OpenAPI**:
+6. ✅ **CRUD Pagamentos** (5 endpoints):
+   - `POST /api/payments` - Criar pagamento (PIX, cartão, boleto, transferência) ✅
+   - `GET /api/payments/my` - Listar meus pagamentos ✅
+   - `GET /api/payments/:id` - Detalhes do pagamento ✅
+   - `PUT /api/payments/:id/status` - Atualizar status (pendente/aprovado/recusado) ✅
+   - `GET /api/payments/stats` - Estatísticas de pagamentos ✅
+
+7. ✅ **Documentação Swagger/OpenAPI**:
    - Rota: `GET /api-docs` - Interface interativa ✅
-   - 24 endpoints documentados ✅
-   - Schemas definidos (User, Supplier, Plan, Subscription, Order) ✅
+   - 28 endpoints documentados ✅
+   - Schemas definidos (User, Supplier, Plan, Subscription, Order, Payment) ✅
    - Autenticação JWT Bearer configurada ✅
 
-7. ✅ **Arquitetura**:
-   - 5 Models: User, Supplier, Plan, Subscription, Order ✅
-   - 5 Controllers com validações ✅
-   - 5 Rotas protegidas (authMiddleware, isClient, isSupplier) ✅
+8. ✅ **Arquitetura**:
+   - 6 Models: User, Supplier, Plan, Subscription, Order, Payment ✅
+   - 6 Controllers com validações ✅
+   - 6 Rotas protegidas (authMiddleware, isClient, isSupplier) ✅
    - Transações de banco para integridade de dados ✅
 
 8. ✅ **Funcionalidades Avançadas**:
@@ -173,16 +474,21 @@ Subscrivery/
    - Validação de assinatura ativa antes de criar pedido ✅
    - Prevenção de assinaturas duplicadas ✅
    - Soft delete de fornecedores ✅
+   - Sistema de pagamentos com múltiplos métodos ✅
+   - Estatísticas de pagamentos (total pago, pendente, ticket médio) ✅
+   - Schema preparado para futura integração Asaas ✅
 
 9. ✅ **Testes**:
-   - Interface test-api.html com 18 botões de teste ✅
+   - Interface test-api.html com 22 botões de teste ✅
    - 2 usuários de teste criados ✅
    - 1 fornecedor cadastrado ✅
    - 1 assinatura ativa ✅
+   - 1 pagamento de teste aprovado ✅
 
 10. ✅ **Git**:
-   - 4 commits: Fornecedores, Assinaturas, Swagger, Pedidos ✅
+   - 5 commits: Fornecedores, Assinaturas, Swagger, Pedidos, Pagamentos ✅
    - Repositório: https://github.com/otaviolap/subscrivery-backend ✅
+   - Autor: Leonardo Cabral (biowcabral1995@gmail.com) ✅
 
 ### Banco de Dados (Tabelas Criadas)
 - ✅ `users` - Usuários (clientes + fornecedores)
@@ -275,20 +581,23 @@ npm run dev
 
 ## 📝 Próximos Passos
 
-### Backend (Pendente - 10%)
-- [ ] **CRUD Pagamentos** (payments table)
-  - POST /api/payments - Registrar pagamento
-  - GET /api/payments/my - Meu histórico
-  - GET /api/payments/:id - Detalhes
+### Backend (Opcionais - Melhorias Futuras)
+- ✅ ~~CRUD Pagamentos~~ **COMPLETO** (5 endpoints implementados)
 
-- [ ] **Renovação Automática de Assinaturas**
+- [ ] **Integração Gateway de Pagamento (Opcional)**
+  - Integrar Asaas API (sandbox) para pagamentos de teste
+  - Webhook para receber notificações de status
+  - Apenas 2 ALTER TABLE + service file necessários
+
+- [ ] **Renovação Automática de Assinaturas (Opcional)**
   - Cron job para verificar next_billing_date
   - Renovar crédito automaticamente
-  - Enviar notificação (opcional)
+  - Enviar notificação por email
 
-- [ ] **Relatórios e Dashboards**
+- [ ] **Relatórios e Dashboards (Opcional)**
   - GET /api/reports/supplier/:id - Vendas do fornecedor
   - GET /api/reports/client - Gastos do cliente
+  - Gráficos de consumo mensal
 
 - [ ] **Melhorias Opcionais**
   - Upload de imagem de perfil (Cloudinary)
@@ -296,19 +605,70 @@ npm run dev
   - Rate limiting (express-rate-limit)
   - Logs estruturados (Winston)
 
-### Frontend (Em outro repositório)
-- [ ] Integração com API backend
+### Design (PRIORIDADE MÁXIMA - Maior Dificuldade do Time)
+- [ ] **Logotipo Subscrivery**
+  - Formato PNG (alta resolução, fundo transparente)
+  - Formato SVG (vetorial, escalável)
+  - Documentar fonte utilizada (nome + link)
+  
+- [ ] **Manual da Marca** (PDF)
+  - Aplicações corretas do logo (fundos claros/escuros)
+  - Aplicações incorretas (o que NÃO fazer)
+  - Espaçamento mínimo e tamanhos
+  - Versões (colorida, monocromática, simplificada)
+  
+- [ ] **Paleta de Cores Documentada**
+  - Cores primárias (hex, RGB, CMYK)
+  - Cores secundárias
+  - Cores de estado (sucesso, erro, aviso)
+  - Quando usar cada cor
+  - Combinações permitidas
+  
+- [ ] **Protótipo Completo no Figma**
+  - Tela de Login/Cadastro
+  - Dashboard Cliente (visão geral, assinaturas, pedidos, pagamentos)
+  - Dashboard Fornecedor (pedidos recebidos, perfil)
+  - Marketplace de fornecedores
+  - Tela de checkout/pagamento
+  - Versão mobile responsiva
+  
+- [ ] **Acesso ao Avaliador**
+  - Link público do Figma (view only)
+  - OU convite por email do avaliador
+  - Arquivos do logo em pasta compartilhada (Google Drive/GitHub)
+
+**Ferramentas Recomendadas:**
+- 🎨 **Canva** (gratuito) - Criar logotipo simples
+- 🎨 **Figma** (gratuito) - Protótipos e design system
+- 🎨 **Coolors.co** - Gerar paleta de cores harmoniosa
+- 🎨 **Adobe Color** - Validar contraste e acessibilidade
+- 💡 **ChatGPT/Copilot** - Ajuda com branding, conceito, naming
+
+**Sugestão de Identidade Visual:**
+- **Tema:** Sustentabilidade + Comunidade Local + Conveniência
+- **Cores sugeridas:** Verde (sustentável) + Azul (confiança) + Laranja (energia)
+- **Estilo:** Moderno, limpo, amigável, acessível
+
+### Frontend (Em outro repositório - Prioridade Alta)
+- [ ] Integração completa com API backend (28 endpoints)
 - [ ] Páginas de Login/Cadastro
-- [ ] Dashboard Cliente
-- [ ] Dashboard Fornecedor
+- [ ] Dashboard Cliente (assinaturas, pedidos, pagamentos)
+- [ ] Dashboard Fornecedor (pedidos recebidos, perfil)
 - [ ] Marketplace de fornecedores
 - [ ] Gestão de assinaturas e pedidos
+- [ ] Histórico de pagamentos
 
-### DevOps
-- [ ] Deploy Backend → Railway/Render
+### DevOps (Deploy Backend Completo ✅)
+- ✅ Preparar backend para produção (CORS, .gitignore, scripts)
+- ✅ Deploy Backend → Railway
+- ✅ Configurar variáveis de ambiente em produção
+- ✅ Gerar domínio Railway (subscrivery-backend-production.up.railway.app)
+- ✅ Testar endpoints em produção (health, status, plans funcionando)
+- ✅ Documentar URL da API para equipe frontend
+- ✅ Fix: Escutar em 0.0.0.0 para aceitar conexões externas
 - [ ] Deploy Frontend → Vercel
-- [ ] Configurar variáveis de ambiente em produção
-- [ ] Testes de integração
+- [ ] Atualizar FRONTEND_URL no Railway após deploy do frontend
+- [ ] Testes de integração completos
 - [ ] Monitoramento (opcional)
 
 ---
