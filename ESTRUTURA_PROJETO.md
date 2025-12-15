@@ -117,10 +117,10 @@ Subscrivery/
    📍 Repositório: https://github.com/otaviolap/subscrivery-frontend  
    ⏳ Em desenvolvimento pela equipe
 
-### ⚠️ Design (0% completo - PRIORIDADE ALTA - DIFICULDADE DO TIME)
-   ⏳ **Logotipo** (PNG, SVG + fonte utilizada)  
+### ⏳ Design (40% completo - PRIORIDADE ALTA)
+   ✅ **Logotipo** (PNG, SVG + fonte utilizada)  
    ⏳ **Manual da marca** (PDF com aplicações corretas)  
-   ⏳ **Paleta de cores documentada** (códigos hex, RGB, quando usar cada cor)  
+   ✅ **Paleta de cores documentada** (códigos hex, RGB, quando usar cada cor)  
    ⏳ **Protótipo completo no Figma** (todas as telas principais)  
    ⏳ **Acesso concedido ao avaliador** (link público ou convite)  
    
@@ -605,11 +605,11 @@ npm run dev
   - Rate limiting (express-rate-limit)
   - Logs estruturados (Winston)
 
-### Design (PRIORIDADE MÁXIMA - Maior Dificuldade do Time)
-- [ ] **Logotipo Subscrivery**
-  - Formato PNG (alta resolução, fundo transparente)
-  - Formato SVG (vetorial, escalável)
-  - Documentar fonte utilizada (nome + link)
+### Design (PRIORIDADE ALTA - 40% Concluído)
+- ✅ **Logotipo Subscrivery**
+  - ✅ Formato PNG (alta resolução, fundo transparente)
+  - ✅ Formato SVG (vetorial, escalável)
+  - ✅ Documentar fonte utilizada (nome + link)
   
 - [ ] **Manual da Marca** (PDF)
   - Aplicações corretas do logo (fundos claros/escuros)
@@ -617,12 +617,12 @@ npm run dev
   - Espaçamento mínimo e tamanhos
   - Versões (colorida, monocromática, simplificada)
   
-- [ ] **Paleta de Cores Documentada**
-  - Cores primárias (hex, RGB, CMYK)
-  - Cores secundárias
-  - Cores de estado (sucesso, erro, aviso)
-  - Quando usar cada cor
-  - Combinações permitidas
+- ✅ **Paleta de Cores Documentada**
+  - ✅ Cores primárias (hex, RGB, CMYK)
+  - ✅ Cores secundárias
+  - ✅ Cores de estado (sucesso, erro, aviso)
+  - ✅ Quando usar cada cor
+  - ✅ Combinações permitidas
   
 - [ ] **Protótipo Completo no Figma**
   - Tela de Login/Cadastro
