@@ -26,11 +26,13 @@ Subscrivery é uma plataforma que permite aos usuários assinarem planos mensais
 - PostgreSQL
 - JWT (autenticação)
 - Bcrypt
+- Nodemailer (sistema de emails)
 
 ### Ferramentas
 - Git (GitFlow)
 - ClickUp (gestão de projeto)
 - Postman/Swagger (documentação API)
+- Gmail SMTP (envio de emails)
 
 ## 📁 Estrutura do Projeto
 
@@ -50,13 +52,15 @@ Subscrivery/
 │
 ├── backend/           # API Node.js
 │   ├── src/
-│   │   ├── config/    # Configurações (DB, JWT)
+│   │   ├── config/    # Configurações (DB, JWT, Email)
 │   │   ├── controllers/# Lógica de negócio
 │   │   ├── models/    # Modelos do banco
 │   │   ├── routes/    # Rotas da API
 │   │   ├── middlewares/# Autenticação, validações
+│   │   ├── templates/ # Templates de email
 │   │   ├── services/  # Serviços externos
 │   │   └── utils/     # Funções auxiliares
+│   ├── migrations/    # Scripts SQL
 │   └── package.json
 │
 └── docs/              # Documentação
@@ -69,14 +73,19 @@ Subscrivery/
 
 ### Para Clientes
 - [x] Cadastro e login com JWT
+- [x] Email de boas-vindas ao se cadastrar
+- [x] Recuperação de senha por email
 - [ ] Buscar fornecedores por localização
 - [ ] Escolher plano de assinatura
 - [ ] Gerenciar assinatura (pausar, cancelar, modificar)
 - [ ] Dashboard com histórico de entregas
+- [x] Notificação de pedido criado
+- [x] Notificação de pagamento aprovado
 - [ ] Pagamento com cartão
 
 ### Para Fornecedores
 - [x] Cadastro e login
+- [x] Notificação de novo pedido recebido
 - [ ] Dashboard de pedidos
 - [ ] Gerenciar entregas
 - [ ] Visualizar assinantes
@@ -91,9 +100,16 @@ Subscrivery/
 ### Backend
 ```bash
 cd backend
-npm install
-cp .env.example .env
-# Configure as variáveis de ambiente
+npm install (DATABASE, JWT, EMAIL)
+npm run dev
+```
+
+**Variáveis de ambiente necessárias:**
+- `DATABASE_URL` - Conexão PostgreSQL
+- `JWT_SECRET` - Chave secreta JWT
+- `EMAIL_HOST`, `EMAIL_PORT`, `EMAIL_USER`, `EMAIL_PASSWORD`, `EMAIL_FROM` - Configuração de email
+
+Para configurar emails, veja: [CONFIGURAR_EMAIL.md](./CONFIGURAR_EMAIL.md)onfigure as variáveis de ambiente
 npm run dev
 ```
 
@@ -142,17 +158,47 @@ npm run dev
 
 ### SCRUM
 - Product Backlog
-- Sprint Backlogs
-- Dailies documentadas
+- Sprint BackloRailway (https://subscrivery-backend-production.up.railway.app)
+- **Banco**: Neon PostgreSQL (cloud)
+- **Swagger**: https://subscrivery-backend-production.up.railway.app/api-docs
+
+### Status do Backend em Produção
+- ✅ 30 endpoints funcionais
+- ✅ Sistema de autenticação JWT
+- ✅ Sistema de emails (Nodemailer + Gmail)
+- ✅ Recuperação de senha
+- ✅ Notificações automáticas
 - Burndown charts
 
 ## 🌐 Deploy
 
-- **Frontend**: Vercel/Netlify
-- **Backend**: Heroku/Railway
-- **Banco**: PostgreSQL (cloud)
+## 📧 Sistema de Emails
 
-## 📝 Licença
+O sistema envia automaticamente emails para:
+
+### Emails Transacionais
+- **Boas-vindas**: Enviado ao cadastrar novo usuário
+- **Recuperação de senha**: Link para redefinir senha (expira em 1 hora)
+- **Confirmação de alteração**: Enviado após redefinir senha
+
+### Notificações de Pedidos
+- **Pedido criado**: Cliente recebe confirmação do pedido
+- **Pedido recebido**: Fornecedor é notificado do novo pedido
+
+### Notificações Financeiras
+- **Pagamento aprovado**: Cliente recebe confirmação de pagamento
+
+Todos os emails incluem:
+- Design responsivo e profissional
+- Gradiente roxo/azul da marca
+- Links de ação claros
+- Versão texto alternativa
+
+---
+
+**Status**: 🚧 Em desenvolvimento
+
+**Última atualização**: 16
 
 Projeto desenvolvido para o processo seletivo Coding2U.
 
