@@ -8,6 +8,9 @@ import supplierRoutes from './routes/supplier.routes.js';
 import planRoutes from './routes/plan.routes.js';
 import subscriptionRoutes from './routes/subscription.routes.js';
 import orderRoutes from './routes/order.routes.js';
+import passport from './config/passport.js';
+import oauthRoutes from './routes/oauth.routes.js';
+
 
 // Carregar variáveis de ambiente
 dotenv.config();
@@ -45,6 +48,10 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
 
 // Rotas de autenticação
 app.use('/api/auth', authRoutes);
+
+// Rotas de OAuth
+app.use(passport.initialize());
+app.use('/api/oauth', oauthRoutes);
 
 // Rotas de fornecedores
 app.use('/api/suppliers', supplierRoutes);
@@ -96,3 +103,5 @@ process.on('uncaughtException', (error) => {
   console.error('❌ Uncaught Exception:', error);
   process.exit(1);
 });
+
+

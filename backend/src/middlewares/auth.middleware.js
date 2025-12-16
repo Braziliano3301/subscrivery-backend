@@ -40,7 +40,7 @@ export const authMiddleware = (req, res, next) => {
 
 // Middleware para verificar se usuário é fornecedor
 export const isSupplier = (req, res, next) => {
-  if (req.user.userType !== 'fornecedor') {
+  if (req.user.user_type !== 'fornecedor') {
     return res.status(403).json({ 
       error: 'Acesso negado. Apenas fornecedores podem acessar este recurso.' 
     });
@@ -50,7 +50,7 @@ export const isSupplier = (req, res, next) => {
 
 // Middleware para verificar se usuário é cliente
 export const isClient = (req, res, next) => {
-  if (req.user.userType !== 'cliente') {
+  if (req.user.user_Type !== 'cliente') {
     return res.status(403).json({ 
       error: 'Acesso negado. Apenas clientes podem acessar este recurso.' 
     });
