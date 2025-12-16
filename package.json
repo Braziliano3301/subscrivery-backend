@@ -8,7 +8,10 @@
     "start": "node src/server.js",
     "dev": "node --watch src/server.js",
     "test": "node test-all-endpoints.js",
-    "test:watch": "node --watch test-all-endpoints.js"
+    "test:watch": "node --watch test-all-endpoints.js",
+    "db:setup": "bash setup-db.sh",
+    "db:test": "node test-database-connection.js",
+    "db:seed": "node scripts/seed-database.js"
   },
   "keywords": [
     "subscriptions",
