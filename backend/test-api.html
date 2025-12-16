@@ -1,0 +1,1392 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste API Subscrivery</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2rem;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .test-section {
+            margin-bottom: 25px;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+        h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 6px;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+        .token-box {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 10px;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Testes API Subscrivery</h1>
+        <p class="subtitle">Clique nos botões para testar a API</p>
+
+        <!-- Teste 1: Health Check -->
+        <div class="test-section">
+            <h2>1️⃣ Health Check</h2>
+            <button onclick="testHealth()">Testar Health Check</button>
+            <div id="health-result"></div>
+        </div>
+
+        <!-- Teste 2: Registrar Usuário -->
+        <div class="test-section">
+            <h2>2️⃣ Registrar Usuário Cliente</h2>
+            <button onclick="testRegister()">Registrar Cliente</button>
+            <div id="register-result"></div>
+        </div>
+
+        <!-- Teste 3: Login -->
+        <div class="test-section">
+            <h2>3️⃣ Login</h2>
+            <button onclick="testLogin()">Fazer Login</button>
+            <div id="login-result"></div>
+        </div>
+
+        <!-- Teste 4: Profile -->
+        <div class="test-section">
+            <h2>4️⃣ Ver Perfil (Requer Login)</h2>
+            <button onclick="testProfile()">Ver Perfil</button>
+            <div id="profile-result"></div>
+        </div>
+
+        <!-- Teste 5: Registrar Fornecedor -->
+        <div class="test-section">
+            <h2>5️⃣ Registrar Usuário Fornecedor</h2>
+            <button onclick="testRegisterSupplier()">Registrar Fornecedor</button>
+            <div id="register-supplier-result"></div>
+        </div>
+
+        <!-- Teste 6: Login Fornecedor -->
+        <div class="test-section">
+            <h2>6️⃣ Login Fornecedor</h2>
+            <button onclick="testLoginSupplier()">Login Fornecedor</button>
+            <div id="login-supplier-result"></div>
+        </div>
+
+        <!-- Teste 7: Criar Perfil de Fornecedor -->
+        <div class="test-section">
+            <h2>7️⃣ Criar Perfil de Fornecedor (Requer Login Fornecedor)</h2>
+            <button onclick="testCreateSupplierProfile()">Criar Perfil</button>
+            <div id="create-supplier-result"></div>
+        </div>
+
+        <!-- Teste 8: Listar Fornecedores -->
+        <div class="test-section">
+            <h2>8️⃣ Listar Todos os Fornecedores (Pública)</h2>
+            <button onclick="testListSuppliers()">Listar Fornecedores</button>
+            <div id="list-suppliers-result"></div>
+        </div>
+
+        <!-- Teste 9: Meu Perfil de Fornecedor -->
+        <div class="test-section">
+            <h2>9️⃣ Meu Perfil de Fornecedor (Requer Login Fornecedor)</h2>
+            <button onclick="testMySupplierProfile()">Ver Meu Perfil</button>
+            <div id="my-supplier-result"></div>
+        </div>
+
+        <!-- Teste 10: Listar Planos -->
+        <div class="test-section">
+            <h2>🔟 Listar Planos de Assinatura (Pública)</h2>
+            <button onclick="testListPlans()">Listar Planos</button>
+            <div id="list-plans-result"></div>
+        </div>
+
+        <!-- Teste 11: Criar Assinatura -->
+        <div class="test-section">
+            <h2>1️⃣1️⃣ Criar Assinatura (Requer Login Cliente)</h2>
+            <button onclick="testCreateSubscription()">Criar Assinatura</button>
+            <div id="create-subscription-result"></div>
+        </div>
+
+        <!-- Teste 12: Minha Assinatura -->
+        <div class="test-section">
+            <h2>1️⃣2️⃣ Minha Assinatura Ativa (Requer Login Cliente)</h2>
+            <button onclick="testMySubscription()">Ver Minha Assinatura</button>
+            <div id="my-subscription-result"></div>
+        </div>
+
+        <!-- Teste 13: Pausar Assinatura -->
+        <div class="test-section">
+            <h2>1️⃣3️⃣ Pausar Assinatura (Requer Login Cliente)</h2>
+            <button onclick="testPauseSubscription()">Pausar</button>
+            <div id="pause-subscription-result"></div>
+        </div>
+
+        <!-- Teste 14: Reativar Assinatura -->
+        <div class="test-section">
+            <h2>1️⃣4️⃣ Reativar Assinatura (Requer Login Cliente)</h2>
+            <button onclick="testResumeSubscription()">Reativar</button>
+            <div id="resume-subscription-result"></div>
+        </div>
+
+        <!-- Teste 15: Criar Pedido -->
+        <div class="test-section">
+            <h2>1️⃣5️⃣ Criar Pedido (Requer Login Cliente + Assinatura Ativa)</h2>
+            <button onclick="testCreateOrder()">Criar Pedido</button>
+            <div id="create-order-result"></div>
+        </div>
+
+        <!-- Teste 16: Meus Pedidos -->
+        <div class="test-section">
+            <h2>1️⃣6️⃣ Meus Pedidos (Requer Login Cliente)</h2>
+            <button onclick="testMyOrders()">Listar Meus Pedidos</button>
+            <div id="my-orders-result"></div>
+        </div>
+
+        <!-- Teste 17: Pedidos do Fornecedor -->
+        <div class="test-section">
+            <h2>1️⃣7️⃣ Pedidos do Fornecedor (Requer Login Fornecedor)</h2>
+            <button onclick="testSupplierOrders()">Ver Pedidos Recebidos</button>
+            <div id="supplier-orders-result"></div>
+        </div>
+
+        <!-- Teste 18: Atualizar Status do Pedido -->
+        <div class="test-section">
+            <h2>1️⃣8️⃣ Atualizar Status do Pedido (Requer Login Fornecedor)</h2>
+            <button onclick="testUpdateOrderStatus()">Confirmar Pedido</button>
+            <div id="update-order-result"></div>
+        </div>
+
+        <!-- Teste 19: Criar Pagamento -->
+        <div class="test-section">
+            <h2>1️⃣9️⃣ Criar Pagamento (Requer Login Cliente)</h2>
+            <button onclick="testCreatePayment()">Criar Pagamento PIX R$200</button>
+            <div id="create-payment-result"></div>
+        </div>
+
+        <!-- Teste 20: Listar Meus Pagamentos -->
+        <div class="test-section">
+            <h2>2️⃣0️⃣ Listar Meus Pagamentos (Requer Login Cliente)</h2>
+            <button onclick="testMyPayments()">Ver Meus Pagamentos</button>
+            <div id="my-payments-result"></div>
+        </div>
+
+        <!-- Teste 21: Aprovar Pagamento -->
+        <div class="test-section">
+            <h2>2️⃣1️⃣ Aprovar Pagamento (Requer Login Cliente)</h2>
+            <button onclick="testApprovePayment()">Aprovar Último Pagamento</button>
+            <div id="approve-payment-result"></div>
+        </div>
+
+        <!-- Teste 22: Estatísticas de Pagamentos -->
+        <div class="test-section">
+            <h2>2️⃣2️⃣ Estatísticas de Pagamentos (Requer Login Cliente)</h2>
+            <button onclick="testPaymentStats()">Ver Estatísticas</button>
+            <div id="payment-stats-result"></div>
+        </div>
+    </div>
+
+    <script>
+        let authToken = null;
+        let supplierToken = null;
+        let supplierId = null;
+        let subscriptionId = null;
+        let selectedPlanId = null;
+        let orderId = null;
+        let paymentId = null;
+
+        async function testHealth() {
+            const resultDiv = document.getElementById('health-result');
+            resultDiv.innerHTML = '<div class="result info">⏳ Testando...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/health');
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <div class="result success">
+                        ✅ Sucesso!<br>
+                        ${JSON.stringify(data, null, 2)}
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ❌ Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testRegister() {
+            const resultDiv = document.getElementById('register-result');
+            resultDiv.innerHTML = '<div class="result info">⏳ Registrando usuário...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: 'cliente@test.com',
+                        password: 'senha123',
+                        name: 'Cliente Teste',
+                        phone: '11999999999',
+                        user_type: 'cliente'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    authToken = data.token;
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            ✅ Usuário registrado com sucesso!<br>
+                            ${JSON.stringify(data.user, null, 2)}
+                            <div class="token-box">
+                                🔑 Token salvo automaticamente!
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            ⚠️ ${data.error || 'Erro desconhecido'}<br>
+                            ${data.details ? JSON.stringify(data.details, null, 2) : ''}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ❌ Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testLogin() {
+            const resultDiv = document.getElementById('login-result');
+            resultDiv.innerHTML = '<div class="result info">⏳ Fazendo login...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: 'cliente@test.com',
+                        password: 'senha123'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    authToken = data.token;
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            ✅ Login realizado com sucesso!<br>
+                            ${JSON.stringify(data.user, null, 2)}
+                            <div class="token-box">
+                                🔑 Token salvo! Agora você pode testar o perfil.
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            ❌ ${data.error || 'Erro no login'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ❌ Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testProfile() {
+            const resultDiv = document.getElementById('profile-result');
+            
+            if (!authToken) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Você precisa fazer login primeiro!
+                    </div>
+                `;
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="result info">⏳ Buscando perfil...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/auth/profile', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            ✅ Perfil carregado!<br>
+                            ${JSON.stringify(data.user, null, 2)}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            ❌ ${data.error || 'Erro ao buscar perfil'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ❌ Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testRegisterSupplier() {
+            const resultDiv = document.getElementById('register-supplier-result');
+            resultDiv.innerHTML = '<div class="result info">⏳ Criando usuário fornecedor...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: 'fornecedor@test.com',
+                        password: 'senha123',
+                        name: 'Fornecedor Teste',
+                        phone: '11987654321',
+                        user_type: 'fornecedor'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            ✅ Usuário fornecedor criado!<br>
+                            ID: ${data.user.id}<br>
+                            Email: ${data.user.email}<br>
+                            Nome: ${data.user.name}<br>
+                            Tipo: ${data.user.user_type}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            ❌ ${data.error || 'Erro ao criar usuário'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ❌ Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testLoginSupplier() {
+            const resultDiv = document.getElementById('login-supplier-result');
+            resultDiv.innerHTML = '<div class="result info">⏳ Fazendo login do fornecedor...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: 'fornecedor@test.com',
+                        password: 'senha123'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    supplierToken = data.token;
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            ✅ Login fornecedor realizado!<br>
+                            ${JSON.stringify(data.user, null, 2)}
+                            <div class="token-box">
+                                🔑 Token de fornecedor salvo!
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            ❌ ${data.error || 'Erro no login'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ❌ Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testCreateSupplierProfile() {
+            const resultDiv = document.getElementById('create-supplier-result');
+            
+            if (!supplierToken) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Você precisa fazer login como fornecedor primeiro!
+                    </div>
+                `;
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="result info">⏳ Criando perfil de fornecedor...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/suppliers', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${supplierToken}`
+                    },
+                    body: JSON.stringify({
+                        business_name: 'Supermercado Bom Preço',
+                        cnpj: '12345678000190',
+                        category: 'supermercado',
+                        address: 'Rua das Flores, 123',
+                        city: 'São Paulo',
+                        state: 'SP',
+                        zip_code: '01234567'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    supplierId = data.supplier.id;
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            ✅ Perfil de fornecedor criado!<br>
+                            ${JSON.stringify(data.supplier, null, 2)}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            ❌ ${data.error || 'Erro ao criar perfil'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ❌ Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testListSuppliers() {
+            const resultDiv = document.getElementById('list-suppliers-result');
+            resultDiv.innerHTML = '<div class="result info">⏳ Buscando fornecedores...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/suppliers');
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            ✅ ${data.suppliers.length} fornecedor(es) encontrado(s)!<br>
+                            ${JSON.stringify(data, null, 2)}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            ❌ ${data.error || 'Erro ao listar'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ❌ Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testMySupplierProfile() {
+            const resultDiv = document.getElementById('my-supplier-result');
+            
+            if (!supplierToken) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Você precisa fazer login como fornecedor primeiro!
+                    </div>
+                `;
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="result info">⏳ Buscando seu perfil...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/suppliers/me/profile', {
+                    headers: {
+                        'Authorization': `Bearer ${supplierToken}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            ✅ Seu perfil de fornecedor!<br>
+                            ${JSON.stringify(data.supplier, null, 2)}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            ❌ ${data.error || 'Erro ao buscar perfil'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ❌ Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testListPlans() {
+            const resultDiv = document.getElementById('list-plans-result');
+            resultDiv.innerHTML = '<div class="result info">⏳ Buscando planos...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/plans');
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Salvar ID do primeiro plano para usar nos testes
+                    if (data.plans && data.plans.length > 0) {
+                        selectedPlanId = data.plans[0].id;
+                    }
+                    
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            ✅ ${data.plans.length} plano(s) encontrado(s)!<br>
+                            ${JSON.stringify(data, null, 2)}
+                            <div class="token-box">
+                                💡 Primeiro plano salvo para testes: ${selectedPlanId}
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            ❌ ${data.error || 'Erro ao listar planos'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ❌ Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testCreateSubscription() {
+            const resultDiv = document.getElementById('create-subscription-result');
+            
+            if (!authToken) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Você precisa fazer login como cliente primeiro!
+                    </div>
+                `;
+                return;
+            }
+
+            if (!selectedPlanId) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Primeiro liste os planos para selecionar um!
+                    </div>
+                `;
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="result info">⏳ Criando assinatura...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/subscriptions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        plan_id: selectedPlanId
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    subscriptionId = data.subscription.id;
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            ✅ Assinatura criada!<br>
+                            ${JSON.stringify(data, null, 2)}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            ❌ ${data.error || 'Erro ao criar assinatura'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ❌ Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testMySubscription() {
+            const resultDiv = document.getElementById('my-subscription-result');
+            
+            if (!authToken) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Você precisa fazer login como cliente primeiro!
+                    </div>
+                `;
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="result info">⏳ Buscando sua assinatura...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/subscriptions/my', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    subscriptionId = data.subscription.id;
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            ✅ Sua assinatura ativa!<br>
+                            ${JSON.stringify(data, null, 2)}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            ❌ ${data.error || 'Erro ao buscar assinatura'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ❌ Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testPauseSubscription() {
+            const resultDiv = document.getElementById('pause-subscription-result');
+            
+            if (!authToken) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Você precisa fazer login como cliente primeiro!
+                    </div>
+                `;
+                return;
+            }
+
+            if (!subscriptionId) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Você precisa buscar sua assinatura primeiro!
+                    </div>
+                `;
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="result info">⏳ Pausando assinatura...</div>';
+            
+            try {
+                const response = await fetch(`http://localhost:3000/api/subscriptions/${subscriptionId}/pause`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            ✅ ${data.message}<br>
+                            ${JSON.stringify(data.subscription, null, 2)}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            ❌ ${data.error || 'Erro ao pausar'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ❌ Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testResumeSubscription() {
+            const resultDiv = document.getElementById('resume-subscription-result');
+            
+            if (!authToken) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Você precisa fazer login como cliente primeiro!
+                    </div>
+                `;
+                return;
+            }
+
+            if (!subscriptionId) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Você precisa buscar sua assinatura primeiro!
+                    </div>
+                `;
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="result info">⏳ Reativando assinatura...</div>';
+            
+            try {
+                const response = await fetch(`http://localhost:3000/api/subscriptions/${subscriptionId}/resume`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            ✅ ${data.message}<br>
+                            ${JSON.stringify(data.subscription, null, 2)}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            ❌ ${data.error || 'Erro ao reativar'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ❌ Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testCreateOrder() {
+            const resultDiv = document.getElementById('create-order-result');
+            
+            if (!authToken) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Você precisa fazer login como cliente primeiro!
+                    </div>
+                `;
+                return;
+            }
+
+            if (!supplierId) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Nenhum fornecedor cadastrado. Crie um fornecedor primeiro!
+                    </div>
+                `;
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="result info">⏳ Criando pedido...</div>';
+            
+            try {
+                const orderData = {
+                    supplier_id: supplierId,
+                    delivery_date: '2025-12-20',
+                    items: [
+                        {
+                            product_name: 'Arroz 5kg',
+                            quantity: 2,
+                            unit_price: 25.50
+                        },
+                        {
+                            product_name: 'Feijão 1kg',
+                            quantity: 3,
+                            unit_price: 8.90
+                        }
+                    ]
+                };
+
+                const response = await fetch('http://localhost:3000/api/orders', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify(orderData)
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    orderId = data.order.id;
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            ✅ ${data.message}<br>
+                            <strong>ID:</strong> ${data.order.id}<br>
+                            <strong>Total:</strong> R$ ${data.order.total_amount}<br>
+                            <strong>Crédito Restante:</strong> R$ ${data.remaining_credit}<br>
+                            <strong>Itens:</strong> ${data.order.items.length}<br>
+                            ${JSON.stringify(data.order, null, 2)}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            ❌ ${data.error || 'Erro ao criar pedido'}<br>
+                            ${data.details || ''}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ❌ Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testMyOrders() {
+            const resultDiv = document.getElementById('my-orders-result');
+            
+            if (!authToken) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Você precisa fazer login como cliente primeiro!
+                    </div>
+                `;
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="result info">⏳ Buscando pedidos...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/orders/my', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    if (data.orders.length > 0) {
+                        orderId = data.orders[0].id; // Salvar o primeiro pedido
+                    }
+                    
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            ✅ ${data.orders.length} pedido(s) encontrado(s)<br>
+                            <strong>Total:</strong> ${data.pagination.total}<br>
+                            ${JSON.stringify(data.orders, null, 2)}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            ❌ ${data.error || 'Erro ao buscar pedidos'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ❌ Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testSupplierOrders() {
+            const resultDiv = document.getElementById('supplier-orders-result');
+            
+            if (!supplierToken) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Você precisa fazer login como fornecedor primeiro!
+                    </div>
+                `;
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="result info">⏳ Buscando pedidos do fornecedor...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/orders/supplier/orders', {
+                    headers: {
+                        'Authorization': `Bearer ${supplierToken}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    if (data.orders.length > 0) {
+                        orderId = data.orders[0].id; // Salvar o primeiro pedido
+                    }
+                    
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            ✅ ${data.orders.length} pedido(s) recebido(s)<br>
+                            <strong>Total:</strong> ${data.pagination.total}<br>
+                            ${JSON.stringify(data.orders, null, 2)}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            ❌ ${data.error || 'Erro ao buscar pedidos'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ❌ Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testUpdateOrderStatus() {
+            const resultDiv = document.getElementById('update-order-result');
+            
+            if (!supplierToken) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Você precisa fazer login como fornecedor primeiro!
+                    </div>
+                `;
+                return;
+            }
+
+            if (!orderId) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Nenhum pedido selecionado. Liste os pedidos primeiro!
+                    </div>
+                `;
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="result info">⏳ Atualizando status do pedido...</div>';
+            
+            try {
+                const response = await fetch(`http://localhost:3000/api/orders/${orderId}/status`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${supplierToken}`
+                    },
+                    body: JSON.stringify({ status: 'confirmado' })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            ✅ ${data.message}<br>
+                            <strong>Novo Status:</strong> ${data.order.status}<br>
+                            ${JSON.stringify(data.order, null, 2)}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            ❌ ${data.error || 'Erro ao atualizar status'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ❌ Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        // ===== TESTES DE PAGAMENTOS =====
+        
+        async function testCreatePayment() {
+            const resultDiv = document.getElementById('create-payment-result');
+            
+            if (!authToken) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Você precisa fazer login como cliente primeiro!
+                    </div>
+                `;
+                return;
+            }
+
+            if (!subscriptionId) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Nenhuma assinatura ativa. Crie uma assinatura primeiro!
+                    </div>
+                `;
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="result info">⏳ Criando pagamento...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/payments', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        subscription_id: subscriptionId,
+                        amount: 200.00,
+                        payment_method: 'pix',
+                        transaction_id: `PIX-${Date.now()}`
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    paymentId = data.data.id;
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            ✅ ${data.message}<br>
+                            <strong>ID do Pagamento:</strong> ${paymentId}<br>
+                            <strong>Valor:</strong> R$ ${data.data.amount}<br>
+                            <strong>Método:</strong> ${data.data.payment_method}<br>
+                            <strong>Status:</strong> ${data.data.status}<br>
+                            ${JSON.stringify(data.data, null, 2)}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            ❌ ${data.message || 'Erro ao criar pagamento'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ❌ Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testMyPayments() {
+            const resultDiv = document.getElementById('my-payments-result');
+            
+            if (!authToken) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Você precisa fazer login como cliente primeiro!
+                    </div>
+                `;
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="result info">⏳ Buscando pagamentos...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/payments/my', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    const count = data.data.length;
+                    const paymentsList = data.data.map(p => `
+                        📄 ${p.payment_method.toUpperCase()} - R$ ${p.amount} - ${p.status}
+                        ID: ${p.id}
+                        Data: ${new Date(p.payment_date).toLocaleString('pt-BR')}
+                    `).join('\n---\n');
+                    
+                    if (count > 0 && !paymentId) {
+                        paymentId = data.data[0].id;
+                    }
+                    
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            ✅ Encontrados ${count} pagamento(s)<br>
+                            <strong>Total:</strong> ${data.pagination.total}<br><br>
+                            ${paymentsList || 'Nenhum pagamento encontrado'}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            ❌ ${data.message || 'Erro ao buscar pagamentos'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ❌ Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testApprovePayment() {
+            const resultDiv = document.getElementById('approve-payment-result');
+            
+            if (!authToken) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Você precisa fazer login como cliente primeiro!
+                    </div>
+                `;
+                return;
+            }
+
+            if (!paymentId) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Nenhum pagamento selecionado. Crie ou liste pagamentos primeiro!
+                    </div>
+                `;
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="result info">⏳ Aprovando pagamento...</div>';
+            
+            try {
+                const response = await fetch(`http://localhost:3000/api/payments/${paymentId}/status`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        status: 'aprovado',
+                        transaction_id: `CONFIRMED-${Date.now()}`
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            ✅ ${data.message}<br>
+                            <strong>Status:</strong> ${data.data.status}<br>
+                            <strong>Transaction ID:</strong> ${data.data.transaction_id}<br>
+                            ${JSON.stringify(data.data, null, 2)}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            ❌ ${data.message || 'Erro ao aprovar pagamento'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ❌ Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testPaymentStats() {
+            const resultDiv = document.getElementById('payment-stats-result');
+            
+            if (!authToken) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ⚠️ Você precisa fazer login como cliente primeiro!
+                    </div>
+                `;
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="result info">⏳ Buscando estatísticas...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/payments/stats', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    const stats = data.data;
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            ✅ Estatísticas de Pagamentos<br><br>
+                            <strong>Total de Pagamentos:</strong> ${stats.total_payments}<br>
+                            <strong>Total Pago:</strong> R$ ${stats.total_paid.toFixed(2)}<br>
+                            <strong>Total Pendente:</strong> R$ ${stats.total_pending.toFixed(2)}<br>
+                            <strong>Ticket Médio:</strong> R$ ${stats.avg_payment.toFixed(2)}<br><br>
+                            ${JSON.stringify(stats, null, 2)}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            ❌ ${data.message || 'Erro ao buscar estatísticas'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        ❌ Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
