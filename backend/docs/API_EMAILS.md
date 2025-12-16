@@ -12,9 +12,11 @@ Sistema completo de emails transacionais e notificações usando **Nodemailer** 
 EMAIL_HOST=smtp.gmail.com
 EMAIL_PORT=587
 EMAIL_USER=seu-email@gmail.com
-EMAIL_PASSWORD=senha-de-app-16-caracteres
+EMAIL_PASSWORD=sua-senha-app-16-caracteres
 EMAIL_FROM=Subscrivery <noreply@subscrivery.com>
 ```
+
+> 🔒 **Segurança**: Nunca commite credenciais reais no Git. Use variáveis de ambiente.
 
 ### Verificação de Configuração
 

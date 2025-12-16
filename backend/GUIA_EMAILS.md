@@ -15,12 +15,12 @@ Se você puxou as últimas mudanças do GitHub, o sistema de email já está pro
 ```env
 EMAIL_HOST=smtp.gmail.com
 EMAIL_PORT=587
-EMAIL_USER=biowcabral1995@gmail.com
-EMAIL_PASSWORD=dfwxzjipkuenfkoq
+EMAIL_USER=seu-email@gmail.com
+EMAIL_PASSWORD=sua-senha-app-16-caracteres
 EMAIL_FROM=Subscrivery <noreply@subscrivery.com>
 ```
 
-> ⚠️ **Nota**: Essas são as credenciais do projeto. Em produção (Railway) já estão configuradas.
+> ⚠️ **IMPORTANTE**: Use as credenciais fornecidas pela equipe (não commitadas no Git por segurança). Em produção (Railway) já estão configuradas.
 
 ### 2️⃣ Teste se está funcionando
 

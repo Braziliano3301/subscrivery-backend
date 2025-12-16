@@ -14,7 +14,7 @@
 3. Selecione "Outro (nome personalizado)"
 4. Digite: **Subscrivery Backend**
 5. Clique **"Gerar"**
-6. **COPIE a senha de 16 caracteres** (exemplo: abcd efgh ijkl mnop)
+6. **COPIE a senha de 16 caracteres** (exemplo: dfwx zjip kuen fkoq)
 
 ### 3. Adicionar no .env
 
@@ -25,7 +25,7 @@ Edite o arquivo `backend/.env` e adicione:
 EMAIL_HOST=smtp.gmail.com
 EMAIL_PORT=587
 EMAIL_USER=seu-email@gmail.com
-EMAIL_PASSWORD=abcdefghijklmnop
+EMAIL_PASSWORD=sua-senha-app-16-caracteres
 EMAIL_FROM=Subscrivery <noreply@subscrivery.com>
 ```
 
