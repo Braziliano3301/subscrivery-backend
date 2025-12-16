@@ -1,5 +1,6 @@
 import express from 'express';
 import AuthController from '../controllers/auth.controller.js';
+import { forgotPassword, resetPassword } from '../controllers/passwordReset.controller.js';
 import { authMiddleware } from '../middlewares/auth.middleware.js';
 import { body } from 'express-validator';
 import { validate } from '../middlewares/validate.middleware.js';
@@ -219,6 +220,77 @@ const updateProfileValidation = [
 // Rotas públicas
 router.post('/register', registerValidation, validate, AuthController.register);
 router.post('/login', loginValidation, validate, AuthController.login);
+
+/**
+ * @swagger
+ * /api/auth/forgot-password:
+ *   post:
+ *     summary: Solicitar recuperação de senha
+ *     tags: [Autenticação]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: usuario@exemplo.com
+ *     responses:
+ *       200:
+ *         description: Email de recuperação enviado (se o email existir)
+ */
+router.post(
+  '/forgot-password',
+  [
+    body('email').isEmail().withMessage('Email inválido')
+  ],
+  validate,
+  forgotPassword
+);
+
+/**
+ * @swagger
+ * /api/auth/reset-password/{token}:
+ *   post:
+ *     summary: Redefinir senha com token
+ *     tags: [Autenticação]
+ *     parameters:
+ *       - in: path
+ *         name: token
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Token de recuperação recebido por email
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - password
+ *             properties:
+ *               password:
+ *                 type: string
+ *                 example: novaSenha123
+ *     responses:
+ *       200:
+ *         description: Senha redefinida com sucesso
+ *       400:
+ *         description: Token inválido ou expirado
+ */
+router.post(
+  '/reset-password/:token',
+  [
+    body('password').isLength({ min: 6 }).withMessage('Senha deve ter no mínimo 6 caracteres')
+  ],
+  validate,
+  resetPassword
+);
 
 // Rotas protegidas (requerem autenticação)
 router.get('/profile', authMiddleware, AuthController.getProfile);

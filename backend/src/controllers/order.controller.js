@@ -1,6 +1,9 @@
 import OrderModel from '../models/order.model.js';
 import SubscriptionModel from '../models/subscription.model.js';
 import SupplierModel from '../models/supplier.model.js';
+import { sendEmail } from '../config/email.js';
+import { orderCreatedClientEmail, orderReceivedSupplierEmail } from '../templates/emailTemplates.js';
+import pool from '../config/database.js';
 
 class OrderController {
   // Criar novo pedido (apenas clientes)
@@ -60,6 +63,41 @@ class OrderController {
       
       // Deduzir crédito
       await OrderModel.deductSubscriptionCredit(subscription.id, total_amount);
+      
+      // Buscar dados do fornecedor para os emails
+      const supplierDataQuery = 'SELECT business_name, user_id FROM suppliers WHERE id = $1';
+      const supplierDataResult = await pool.query(supplierDataQuery, [supplier_id]);
+      const supplierData = supplierDataResult.rows[0];
+
+      const supplierUserQuery = 'SELECT name, email FROM users WHERE id = $1';
+      const supplierUserResult = await pool.query(supplierUserQuery, [supplierData.user_id]);
+      const supplierUser = supplierUserResult.rows[0];
+
+      // Email para o cliente
+      const clientEmailContent = orderCreatedClientEmail(
+        req.user.name,
+        order,
+        supplierData.business_name
+      );
+      sendEmail({
+        to: req.user.email,
+        subject: clientEmailContent.subject,
+        html: clientEmailContent.html,
+        text: clientEmailContent.text
+      }).catch(err => console.error('Erro ao enviar email para cliente:', err));
+
+      // Email para o fornecedor
+      const supplierEmailContent = orderReceivedSupplierEmail(
+        supplier.business_name,
+        order,
+        req.user.name
+      );
+      sendEmail({
+        to: supplierUser.email,
+        subject: supplierEmailContent.subject,
+        html: supplierEmailContent.html,
+        text: supplierEmailContent.text
+      }).catch(err => console.error('Erro ao enviar email para fornecedor:', err));
       
       res.status(201).json({ 
         message: 'Pedido criado com sucesso',

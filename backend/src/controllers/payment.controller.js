@@ -1,5 +1,8 @@
 import PaymentModel from '../models/payment.model.js';
 import SubscriptionModel from '../models/subscription.model.js';
+import { sendEmail } from '../config/email.js';
+import { paymentApprovedEmail } from '../templates/emailTemplates.js';
+import pool from '../config/database.js';
 
 class PaymentController {
   // Criar novo pagamento
@@ -164,6 +167,37 @@ class PaymentController {
       
       // Atualizar status
       const updatedPayment = await PaymentModel.updateStatus(id, status, transaction_id);
+      
+      // Se pagamento foi aprovado, enviar email de confirmação
+      if (status === 'aprovado') {
+        try {
+          // Buscar dados da assinatura
+          const subscriptionQuery = await pool.query(
+            'SELECT s.*, u.name as user_name, u.email as user_email FROM subscriptions s JOIN users u ON s.user_id = u.id WHERE s.id = $1',
+            [payment.subscription_id]
+          );
+          
+          if (subscriptionQuery.rows.length > 0) {
+            const subscription = subscriptionQuery.rows[0];
+            
+            const emailContent = paymentApprovedEmail(
+              subscription.user_name,
+              updatedPayment,
+              subscription
+            );
+            
+            await sendEmail(
+              subscription.user_email,
+              emailContent.subject,
+              emailContent.html,
+              emailContent.text
+            );
+          }
+        } catch (emailError) {
+          console.error('Erro ao enviar email de pagamento aprovado:', emailError);
+          // Não bloqueia a resposta se o email falhar
+        }
+      }
       
       return res.status(200).json({
         success: true,
