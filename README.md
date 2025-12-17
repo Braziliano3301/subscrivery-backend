@@ -113,6 +113,33 @@ Para configurar emails, veja: [CONFIGURAR_EMAIL.md](./CONFIGURAR_EMAIL.md)onfigu
 npm run dev
 ```
 
+## 🧪 Testes Automatizados
+
+Para testar todos os endpoints do Asaas Sandbox automaticamente:
+
+```bash
+npm test
+```
+
+Vai testar:
+- Health check do servidor
+- Criar cliente (customer)
+- Listar clientes
+- Criar pagamento
+- Listar pagamentos
+- Criar assinatura
+- Listar assinatura
+- Cancelar assinatura
+
+## 📚 Documentação da API
+
+Veja a pasta `docs/` para guias completos:
+- [SETUP.md](docs/SETUP.md) - Configurar Asaas
+- [TESTE_RAPIDO.md](docs/TESTE_RAPIDO.md) - Quick start (5 min)
+- [TESTANDO_API.md](docs/TESTANDO_API.md) - Guia completo
+- [OBTER_CUSTOMER_ID.md](docs/OBTER_CUSTOMER_ID.md) - Como obter IDs
+- [TROUBLESHOOTING_API.md](docs/TROUBLESHOOTING_API.md) - Problemas
+
 ### Frontend
 ```bash
 cd frontend
@@ -206,4 +233,4 @@ Projeto desenvolvido para o processo seletivo Coding2U.
 
 **Status**: 🚧 Em desenvolvimento
 
-**Última atualização**: 12/12/2025
+**Última atualização**: 16/12/2025

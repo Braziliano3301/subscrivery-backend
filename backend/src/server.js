@@ -9,8 +9,8 @@ import planRoutes from './routes/plan.routes.js';
 import subscriptionRoutes from './routes/subscription.routes.js';
 import orderRoutes from './routes/order.routes.js';
 import paymentRoutes from './routes/payment.routes.js';
-import asaasRoutes from './routes/asaas.routes.js';
-import AsaasPaymentController from './controllers/asaasPayment.controller.js';
+
+import analyticsRoutes from './routes/analytics.routes.js';
 
 // Carregar variáveis de ambiente
 dotenv.config();
@@ -94,11 +94,10 @@ app.use('/api/orders', orderRoutes);
 // Rotas de pagamentos
 app.use('/api/payments', paymentRoutes);
 
-// Rotas de pagamentos Asaas
-app.use('/api/payments/asaas', asaasRoutes);
 
-// Webhook do Asaas (sem autenticação JWT, mas com validação de token)
-app.post('/api/webhooks/asaas', AsaasPaymentController.handleAsaasWebhook);
+// Rotas de analytics
+app.use('/api/analytics', analyticsRoutes);
+
 
 // Tratamento de erro 404
 app.use((req, res) => {
