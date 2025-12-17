@@ -9,6 +9,7 @@ import planRoutes from './routes/plan.routes.js';
 import subscriptionRoutes from './routes/subscription.routes.js';
 import orderRoutes from './routes/order.routes.js';
 import paymentRoutes from './routes/payment.routes.js';
+
 import analyticsRoutes from './routes/analytics.routes.js';
 
 // Carregar variáveis de ambiente
@@ -93,8 +94,10 @@ app.use('/api/orders', orderRoutes);
 // Rotas de pagamentos
 app.use('/api/payments', paymentRoutes);
 
+
 // Rotas de analytics
 app.use('/api/analytics', analyticsRoutes);
+
 
 // Tratamento de erro 404
 app.use((req, res) => {
