@@ -124,3 +124,12 @@ CREATE TRIGGER update_users_updated_at BEFORE UPDATE ON users FOR EACH ROW EXECU
 CREATE TRIGGER update_suppliers_updated_at BEFORE UPDATE ON suppliers FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_subscriptions_updated_at BEFORE UPDATE ON subscriptions FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_orders_updated_at BEFORE UPDATE ON orders FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+-- Alter Table
+
+ALTER TABLE users
+ADD COLUMN auth_provider VARCHAR(20) DEFAULT 'local',
+ADD COLUMN google_id VARCHAR(255),
+ALTER COLUMN password_hash DROP NOT NULL;
+
