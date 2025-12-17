@@ -126,3 +126,10 @@ CREATE TRIGGER update_subscriptions_updated_at BEFORE UPDATE ON subscriptions FO
 CREATE TRIGGER update_orders_updated_at BEFORE UPDATE ON orders FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 
+-- Alter Table
+
+ALTER TABLE users
+ADD COLUMN auth_provider VARCHAR(20) DEFAULT 'local',
+ADD COLUMN google_id VARCHAR(255),
+ALTER COLUMN password_hash DROP NOT NULL;
+
