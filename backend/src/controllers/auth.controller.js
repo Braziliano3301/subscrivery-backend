@@ -1,5 +1,7 @@
 import UserModel from '../models/user.model.js';
 import jwt from 'jsonwebtoken';
+import { sendEmail } from '../config/email.js';
+import { welcomeEmail } from '../templates/emailTemplates.js';
 
 class AuthController {
   // Registrar novo usuário
@@ -36,6 +38,15 @@ class AuthController {
         process.env.JWT_SECRET,
         { expiresIn: process.env.JWT_EXPIRES_IN }
       );
+
+      // Enviar email de boas-vindas (não bloquear registro se falhar)
+      const emailContent = welcomeEmail(user.name);
+      sendEmail({
+        to: user.email,
+        subject: emailContent.subject,
+        html: emailContent.html,
+        text: emailContent.text
+      }).catch(err => console.error('Erro ao enviar email de boas-vindas:', err));
 
       res.status(201).json({
         message: 'Usuário cadastrado com sucesso',

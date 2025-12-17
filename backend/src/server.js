@@ -8,6 +8,7 @@ import supplierRoutes from './routes/supplier.routes.js';
 import planRoutes from './routes/plan.routes.js';
 import subscriptionRoutes from './routes/subscription.routes.js';
 import orderRoutes from './routes/order.routes.js';
+
 import passport from './config/passport.js';
 import oauthRoutes from './routes/oauth.routes.js';
 
@@ -24,12 +25,22 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(cors({
-  origin: '*', // Permitir todas as origens em desenvolvimento
-  credentials: true
-}));
+// Configuração de CORS dinâmica (desenvolvimento vs produção)
+const corsOptions = {
+  origin: process.env.NODE_ENV === 'production' 
+    ? process.env.FRONTEND_URL  // Em produção: apenas frontend autorizado
+    : '*',                       // Em desenvolvimento: qualquer origem
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Servir arquivos estáticos (test-api.html)
+app.use(express.static('.'));
 
 // Rota de health check
 app.get('/api/health', (req, res) => {
@@ -37,6 +48,26 @@ app.get('/api/health', (req, res) => {
     status: 'ok',
     message: 'Subscrivery API está rodando',
     timestamp: new Date().toISOString()
+  });
+});
+
+// Rota de status detalhado (para monitoramento)
+app.get('/api/status', (req, res) => {
+  res.json({
+    status: 'ok',
+    service: 'Subscrivery Backend API',
+    version: '1.0.0',
+    environment: process.env.NODE_ENV || 'development',
+    timestamp: new Date().toISOString(),
+    endpoints: {
+      auth: '/api/auth',
+      suppliers: '/api/suppliers',
+      plans: '/api/plans',
+      subscriptions: '/api/subscriptions',
+      orders: '/api/orders',
+      payments: '/api/payments',
+      docs: '/api-docs'
+    }
   });
 });
 
@@ -65,6 +96,14 @@ app.use('/api/subscriptions', subscriptionRoutes);
 // Rotas de pedidos
 app.use('/api/orders', orderRoutes);
 
+// Rotas de pagamentos
+app.use('/api/payments', paymentRoutes);
+
+
+// Rotas de analytics
+app.use('/api/analytics', analyticsRoutes);
+
+
 // Tratamento de erro 404
 app.use((req, res) => {
   res.status(404).json({ error: 'Rota não encontrada' });
@@ -77,10 +116,11 @@ app.use((err, req, res, next) => {
 });
 
 // Iniciar servidor
-const server = app.listen(PORT, '127.0.0.1', () => {
+const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Servidor rodando na porta ${PORT}`);
   console.log(`📍 Ambiente: ${process.env.NODE_ENV || 'development'}`);
   console.log(`🔗 Health check: http://localhost:${PORT}/api/health`);
+  console.log(`🌐 Servidor acessível externamente em 0.0.0.0:${PORT}`);
 });
 
 // Tratamento de erros do servidor
